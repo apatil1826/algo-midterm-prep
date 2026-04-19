@@ -3,9 +3,7 @@ import { notFound } from "next/navigation";
 import { getPattern, getPatterns, getProblem } from "@/lib/data";
 import { Markup } from "@/components/Math";
 
-export function generateStaticParams() {
-  return getPatterns().map((p) => ({ id: p.id }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function PatternPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

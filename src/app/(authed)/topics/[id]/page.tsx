@@ -4,9 +4,7 @@ import { getTopic, getTopicMeta, getTopics, getProblems } from "@/lib/data";
 import { TopicViewSwitcher } from "@/components/TopicViewSwitcher";
 import { Markup, Prose } from "@/components/Math";
 
-export function generateStaticParams() {
-  return getTopics().map((t) => ({ id: t.id }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function TopicPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

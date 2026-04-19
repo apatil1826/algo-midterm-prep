@@ -4,9 +4,7 @@ import { getProblem, getProblems, getPatterns, getTopics } from "@/lib/data";
 import { Markup, Prose } from "@/components/Math";
 import { MathTip } from "@/components/MathTip";
 
-export function generateStaticParams() {
-  return getProblems().map((p) => ({ id: p.id }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function ProblemPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

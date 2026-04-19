@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "Concept mastery + pattern recognition for the MPCS Algorithms midterm.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider>

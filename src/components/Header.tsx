@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { useCommandPalette } from "./CommandPaletteProvider";
 
 const navItems = [
@@ -54,11 +54,12 @@ export function Header() {
             <UserButton afterSignOutUrl="/sign-in" />
           </SignedIn>
           <SignedOut>
-            <SignInButton mode="modal">
-              <button className="rounded-md bg-yellow-400 px-3 py-1.5 text-xs font-medium text-neutral-900 hover:bg-yellow-300">
-                Sign in
-              </button>
-            </SignInButton>
+            <Link
+              href="/sign-in"
+              className="rounded-md bg-yellow-400 px-3 py-1.5 text-xs font-medium text-neutral-900 hover:bg-yellow-300"
+            >
+              Sign in
+            </Link>
           </SignedOut>
         </div>
       </div>
