@@ -3,6 +3,15 @@ import path from "node:path";
 
 const dataDir = path.join(process.cwd(), "data");
 
+function requireRead<T>(fp: string): T {
+  if (!fs.existsSync(fp)) {
+    throw new Error(
+      `Data file missing at runtime: ${fp}. If this is deployed, ensure next.config.js has outputFileTracingIncludes for ./data/**/*.json.`,
+    );
+  }
+  return JSON.parse(fs.readFileSync(fp, "utf8"));
+}
+
 export type TopicMeta = {
   id: string;
   title: string;
@@ -59,32 +68,28 @@ export type Pattern = {
   examples: { id: string; why: string }[];
 };
 
-function read<T>(p: string): T {
-  return JSON.parse(fs.readFileSync(p, "utf8"));
-}
-
 export function getTopics(): TopicMeta[] {
-  return read<{ topics: TopicMeta[] }>(path.join(dataDir, "topics.json")).topics;
+  return requireRead<{ topics: TopicMeta[] }>(path.join(dataDir, "topics.json")).topics;
 }
 
 export function getTopic(id: string): TopicDetail | null {
   const fp = path.join(dataDir, "topics", `${id}.json`);
   if (!fs.existsSync(fp)) return null;
-  return read<TopicDetail>(fp);
+  return requireRead<TopicDetail>(fp);
 }
 
 export function getProblems(): ProblemMeta[] {
-  return read<{ problems: ProblemMeta[] }>(path.join(dataDir, "problems.json")).problems;
+  return requireRead<{ problems: ProblemMeta[] }>(path.join(dataDir, "problems.json")).problems;
 }
 
 export function getProblem(id: string): ProblemDetail | null {
   const fp = path.join(dataDir, "problems", `${id}.json`);
   if (!fs.existsSync(fp)) return null;
-  return read<ProblemDetail>(fp);
+  return requireRead<ProblemDetail>(fp);
 }
 
 export function getPatterns(): Pattern[] {
-  return read<{ patterns: Pattern[] }>(path.join(dataDir, "patterns.json")).patterns;
+  return requireRead<{ patterns: Pattern[] }>(path.join(dataDir, "patterns.json")).patterns;
 }
 
 export function getPattern(id: string): Pattern | null {
