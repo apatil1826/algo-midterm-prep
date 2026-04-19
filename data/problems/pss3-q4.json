@@ -1,0 +1,23 @@
+{
+  "id": "pss3-q4",
+  "title": "PSS3 Q4 — Majority Element via Equality Tests",
+  "source": "Problem Solving Session 3",
+  "statement": "$n$ objects (even $n$). You may test whether two objects are equal in $O(1)$ — no other operation. Find a **strict majority** element (more than $n/2$ occurrences), or report none. First $O(n \\log n)$ via D&C, then $O(n)$.",
+  "topics": ["divide-and-conquer"],
+  "pattern": "dc-design",
+  "steps": [
+    {
+      "title": "$O(n \\log n)$ via D&C.",
+      "body": "**Key lemma:** if $x$ is the strict majority of $A \\cup B$, then $x$ is also the strict majority of $A$ or of $B$ (or both).\n\n**Proof.** Suppose $x$ has $> |A \\cup B|/2 = (|A|+|B|)/2$ occurrences overall but $\\le |A|/2$ in $A$ and $\\le |B|/2$ in $B$. Sum: $\\le (|A| + |B|)/2$. Contradiction.\n\n**Algorithm.**\n\n1. Base: $n = 1$ → return that element.\n2. Split into halves $L, R$. Recursively find candidate $c_L$ for $L$ and $c_R$ for $R$.\n3. For each candidate, count its occurrences in the whole array by equality tests (linear scan). If either has $> n/2$, return it. Otherwise, no majority.\n\n**Runtime.** $T(n) = 2T(n/2) + O(n) = \\Theta(n \\log n)$.",
+      "tips": []
+    },
+    {
+      "title": "$O(n)$ — Boyer–Moore vote.",
+      "body": "Linear pass maintaining a candidate and a counter:\n\n```\ncandidate = None; count = 0\nfor x in A:\n  if count == 0:\n    candidate = x; count = 1\n  elif x == candidate:\n    count += 1\n  else:\n    count -= 1\n```\n\nAfter the pass, `candidate` is the **only** possible majority. Do one more linear scan to verify it has $> n/2$ occurrences.\n\n**Correctness intuition.** Each 'decrement' pairs the current element with one candidate-occurrence and cancels them. A strict majority cannot be fully cancelled: if $m > n/2$ majority occurrences and $n - m < n/2$ others, pairs use one majority per 'other', so at least $m - (n - m) = 2m - n > 0$ majority occurrences survive.\n\n**Runtime.** Two linear passes → $O(n)$.\n\n**Only equality tests used.** Correct — we never compare for $<$ or $>$.",
+      "tips": [
+        { "label": "Why verification is needed", "content": "The vote step returns a valid candidate IF one exists, but doesn't know if it actually exceeds $n/2$. E.g. all distinct elements: the vote returns *some* element with count $\\ge 1$, but there's no majority. The verify pass catches this." }
+      ]
+    }
+  ],
+  "answerKey": "$O(n \\log n)$ D&C: majority of whole = majority of some half. Find candidates in halves, verify globally. $O(n)$: Boyer–Moore vote + verify."
+}

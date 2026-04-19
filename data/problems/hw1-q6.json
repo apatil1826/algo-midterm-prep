@@ -1,0 +1,33 @@
+{
+  "id": "hw1-q6",
+  "title": "HW1 Q6 — Guess $T(n) = n^p + c$ for $T(n) = T(n/3) + T(2n/3) + 1$",
+  "source": "Homework 1",
+  "statement": "$T(1) = 0$, $T(2) = 1$, and for $n > 2$: $T(n) = T(n/3) + T(2n/3) + 1$. Try $T(n) = \\sqrt{n}$, $n$, $n^2$; which one almost satisfies the recurrence? Then set $T(n) = n^p + c$, pick $p$ and solve for $c$.",
+  "topics": ["induction-proofs", "unbalanced-recurrences"],
+  "pattern": "induct-recurrence",
+  "steps": [
+    {
+      "title": "Try $T(n) = \\sqrt{n}$.",
+      "body": "LHS $= \\sqrt{n}$. RHS $= \\sqrt{n/3} + \\sqrt{2n/3} + 1 = \\sqrt{n}\\left(\\frac{1}{\\sqrt{3}} + \\sqrt{\\frac{2}{3}}\\right) + 1 = \\sqrt{n} \\cdot \\frac{1 + \\sqrt{2}}{\\sqrt{3}} + 1 \\approx 1.39\\sqrt{n} + 1$.\n\nRHS $>$ LHS by a multiplicative factor. The recurrence over-produces — $\\sqrt{n}$ is too small.",
+      "tips": []
+    },
+    {
+      "title": "Try $T(n) = n$.",
+      "body": "LHS $= n$. RHS $= n/3 + 2n/3 + 1 = n + 1$.\n\nLHS $<$ RHS, but **only by the additive 1**. They are essentially equal. This is the right shape — the 'almost satisfies' case. The fix should involve absorbing that extra $+1$.",
+      "tips": []
+    },
+    {
+      "title": "Try $T(n) = n^2$.",
+      "body": "LHS $= n^2$. RHS $= (n/3)^2 + (2n/3)^2 + 1 = n^2/9 + 4n^2/9 + 1 = 5n^2/9 + 1$.\n\nLHS $>$ RHS by a multiplicative factor. $n^2$ is too big.",
+      "tips": []
+    },
+    {
+      "title": "Set $T(n) = n + c$ and solve for $c$.",
+      "body": "From the linear case: LHS $=$ RHS nearly, off by the $+1$. Try $T(n) = n + c$:\n\nLHS $= n + c$. RHS $= (n/3 + c) + (2n/3 + c) + 1 = n + 2c + 1$.\n\nEqual means $n + c = n + 2c + 1$, i.e. $c = -1$.\n\nSo $T(n) = n - 1$ exactly satisfies the recurrence.\n\n**Verification:** $T(n) = n - 1$. RHS $= (n/3 - 1) + (2n/3 - 1) + 1 = n - 1$. ✓ And base cases: $T(1) = 0 = 1 - 1$. ✓ $T(2) = 1 = 2 - 1$. ✓",
+      "tips": [
+        { "label": "Why the shape $n^p$", "content": "The sum $1/3 + 2/3 = 1$ puts this in the 'balanced' case where $\\Theta(n \\log n)$ usually wins. But the additive term is $1$ not $n$, so the balance shifts: linear already overshoots the additive work, so the exact solution is linear." }
+      ]
+    }
+  ],
+  "answerKey": "$T(n) = n - 1$ satisfies the recurrence exactly. So $T(n) = \\Theta(n)$."
+}

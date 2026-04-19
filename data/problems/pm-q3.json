@@ -1,0 +1,36 @@
+{
+  "id": "pm-q3",
+  "title": "Practice Midterm Q3 — Induction for $T(n) = T(n/2) + T(n/3) + n = O(n)$ (5 pts)",
+  "source": "Practice Midterm, Part A",
+  "statement": "Consider $T(n) = T(n/2) + T(n/3) + n$ with $T(1) = 1$. Provide a formal proof by induction that $T(n) = O(n)$.",
+  "topics": ["induction-proofs", "unbalanced-recurrences"],
+  "pattern": "induct-recurrence",
+  "steps": [
+    {
+      "title": "Step 1 — State the concrete claim.",
+      "body": "We want $T(n) = O(n)$, which by definition means $\\exists\\, n_0 \\in \\mathbb{N}$ and $C \\in \\mathbb{R}^+$ such that $T(n) \\le Cn$ for all $n \\ge n_0$.\n\nWe'll prove by strong induction that $T(n) \\le Cn$ for all $n \\ge 1$, and pick $C$ at the end.",
+      "tips": [
+        { "label": "Important: I.H. must be concrete", "content": "Never write 'I.H.: $T(k) = O(k)$'. That's an asymptotic statement, meaningless as an inductive hypothesis. Use a concrete inequality like $T(k) \\le Ck$." }
+      ]
+    },
+    {
+      "title": "Step 2 — Base case.",
+      "body": "Try $n_0 = 1$: $T(1) = 1$. Need $1 \\le C \\cdot 1 = C$. So $C \\ge 1$ suffices for the base case.",
+      "tips": []
+    },
+    {
+      "title": "Step 3 — Inductive step.",
+      "body": "**Inductive hypothesis.** For all $1 \\le k < n$, $T(k) \\le Ck$.\n\nApply the recurrence and the I.H.:\n\n$$T(n) = T\\!\\left(\\tfrac{n}{2}\\right) + T\\!\\left(\\tfrac{n}{3}\\right) + n \\;\\le\\; C\\cdot\\tfrac{n}{2} + C\\cdot\\tfrac{n}{3} + n = n\\left(\\tfrac{C}{2} + \\tfrac{C}{3} + 1\\right) = n\\left(\\tfrac{5C}{6} + 1\\right).$$\n\nWe want this $\\le Cn$, i.e. $\\tfrac{5C}{6} + 1 \\le C$, i.e. $1 \\le C - \\tfrac{5C}{6} = \\tfrac{C}{6}$, i.e. $C \\ge 6$.",
+      "tips": [
+        { "label": "Must be EXACT", "content": "If your inductive step ends with $T(n) \\le (C+1)n$ or $T(n) \\le 2Cn$, that does NOT finish the proof. Those extra constants compound across recursion levels. You must arrive at $T(n) \\le Cn$ exactly, with the same $C$." },
+        { "label": "Why it works here", "content": "Because $1/2 + 1/3 = 5/6 < 1$. The sum of the fractions is the $a+b$ value, and whenever $a+b < 1$ the recurrence is $\\Theta(n)$ — with $C = 1/(1 - (a+b)) = 1/(1 - 5/6) = 6$ always working." }
+      ]
+    },
+    {
+      "title": "Step 4 — Pick $C$.",
+      "body": "Base case needs $C \\ge 1$; inductive step needs $C \\ge 6$. Pick $C = 6$. Then both hold, completing the induction.\n\nTherefore $T(n) \\le 6n$ for all $n \\ge 1$, so $T(n) = O(n)$. $\\square$",
+      "tips": []
+    }
+  ],
+  "answerKey": "By strong induction with claim $T(n) \\le 6n$: base case $T(1)=1 \\le 6$; step $T(n) \\le 6n/2 + 6n/3 + n = 3n + 2n + n = 6n$. Hence $T(n) = O(n)$."
+}

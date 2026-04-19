@@ -1,0 +1,43 @@
+{
+  "id": "pm-q2",
+  "title": "Practice Midterm Q2 — Recursion Tree for $T(n) = 3T(n/5) + n$ (4 pts)",
+  "source": "Practice Midterm, Part A",
+  "statement": "Consider $T(n) = 3T(n/5) + n$, with $T(1) = 1$. Draw the recursion tree and use it to calculate $T(n)$ up to big-$\\Theta$. Include:\n\n- For a general level $i$: number of subproblems at that level, size of each subproblem.\n- Total non-recursive work done at level $i$.\n- Height of the tree, number of leaves, total work at the leaves.\n- Your summing / upper bounding of the series.\n- Conclude $T(n) = \\Theta(?)$.",
+  "topics": ["recursion-trees", "induction-proofs"],
+  "pattern": "recursion-tree-solve",
+  "steps": [
+    {
+      "title": "Step 1 — Identify the parameters.",
+      "body": "We have $T(n) = aT(n/b) + f(n)$ with $a = 3$, $b = 5$, $f(n) = n$. At each level we want the subproblem count, size, and non-recursive work.",
+      "tips": []
+    },
+    {
+      "title": "Step 2 — Per-level accounting.",
+      "body": "At level $i$ (root is level 0):\n\n- **Number of subproblems:** $a^i = 3^i$.\n- **Size of each subproblem:** $n / b^i = n / 5^i$.\n- **Non-recursive work per subproblem:** $f(n/5^i) = n/5^i$.\n- **Total non-recursive work at level $i$:** $3^i \\cdot (n/5^i) = n \\cdot (3/5)^i$.\n\nThis is a **decreasing geometric** with ratio $3/5 < 1$ — level work shrinks going down the tree.",
+      "tips": [
+        { "label": "Exponent rule", "content": "$a^i \\cdot b^{-i} = (a/b)^i$. This is how the level-work $3^i \\cdot (1/5)^i$ becomes $(3/5)^i$." }
+      ]
+    },
+    {
+      "title": "Step 3 — Height and number of leaves.",
+      "body": "Tree stops when subproblem size reaches $1$: $n/5^i = 1 \\Rightarrow i = \\log_5 n$. So the tree has $\\log_5 n$ internal levels, plus leaves at depth $\\log_5 n$.\n\nNumber of leaves: $3^{\\log_5 n} = n^{\\log_5 3}$ (using $a^{\\log_b n} = n^{\\log_b a}$).\n\nWork at the leaves: each leaf is a base case $T(1) = 1$, so total leaf work $= n^{\\log_5 3}$. Since $\\log_5 3 \\approx 0.68 < 1$, this is $o(n)$.",
+      "tips": [
+        { "label": "Useful log identity", "content": "$a^{\\log_b n} = n^{\\log_b a}$. Proof: take $\\log_b$ of both sides, you get $(\\log_b n) \\log_b a$ on each side. This is how number-of-leaves turns into a power of $n$." }
+      ]
+    },
+    {
+      "title": "Step 4 — Sum up.",
+      "body": "Total runtime = internal-level work + leaf work:\n\n$$T(n) = \\sum_{i=0}^{\\log_5 n - 1} n \\left(\\tfrac{3}{5}\\right)^i \\;+\\; n^{\\log_5 3}.$$\n\nFor the geometric sum, upper-bound by the infinite series:\n\n$$\\sum_{i=0}^{\\infty} \\left(\\tfrac{3}{5}\\right)^i = \\dfrac{1}{1 - 3/5} = \\dfrac{5}{2}.$$\n\nSo the first term is at most $\\tfrac{5}{2} n = \\Theta(n)$. Lower bound: the $i=0$ term alone is $n$, so the sum is at least $n$.\n\nLeaves contribute $n^{\\log_5 3} = O(n^{0.68})$, which is $o(n)$ and absorbed into $\\Theta(n)$.",
+      "tips": [
+        { "label": "Infinite geometric", "content": "$\\sum_{i=0}^{\\infty} r^i = \\dfrac{1}{1-r}$ for $0 \\le r < 1$. Here $r = 3/5$, sum $= 5/2$." },
+        { "label": "Why $n^{\\log_5 3}$ is negligible", "content": "$\\log_5 3 < 1$, so $n^{\\log_5 3} = o(n)$. Polynomials beat polynomials with smaller exponents, no matter the log factors." }
+      ]
+    },
+    {
+      "title": "Final answer",
+      "body": "$$T(n) = \\Theta(n).$$",
+      "tips": []
+    }
+  ],
+  "answerKey": "$T(n) = \\Theta(n)$."
+}

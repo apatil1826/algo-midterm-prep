@@ -1,0 +1,30 @@
+{
+  "id": "pm-q6",
+  "title": "Practice Midterm Q6 — Ten Envelopes (Extra Credit, 2 pts)",
+  "source": "Practice Midterm, Extra Credit",
+  "statement": "You have one thousand \\$1 bills. Can you distribute them among 10 envelopes so that any amount from \\$1 to \\$1000 can be made by combining some subset of envelopes exactly? You commit to the distribution first, then the amount is revealed.",
+  "topics": ["divide-and-conquer"],
+  "pattern": "puzzle",
+  "steps": [
+    {
+      "title": "The key idea — binary representation.",
+      "body": "Any integer from 1 to $2^k - 1$ can be written as a sum of a subset of $\\{1, 2, 4, 8, \\ldots, 2^{k-1}\\}$. With $k = 10$ powers of two, you cover $\\{1, 2, \\ldots, 1023\\}$. But we only need to cover $\\{1, \\ldots, 1000\\}$, and we have exactly \\$1000 (not $2^{10} - 1 = 1023$) to distribute.\n\nSo we can't use pure powers of two: $1 + 2 + 4 + \\cdots + 512 = 1023$, but we only have $1000$. We need to modify.",
+      "tips": [
+        { "label": "Sum of first $k$ powers of 2", "content": "$\\sum_{i=0}^{k-1} 2^i = 2^k - 1$. For $k=10$: $2^{10} - 1 = 1023$." }
+      ]
+    },
+    {
+      "title": "The fix — first 9 powers of 2, plus a remainder.",
+      "body": "Use envelopes with $\\{1, 2, 4, 8, 16, 32, 64, 128, 256, \\text{last}\\}$. The first 9 sum to $2^9 - 1 = 511$. The last envelope must contain $1000 - 511 = 489$.\n\n**Claim:** this covers every amount from 1 to 1000.\n\n**Case $n \\in [1, 511]$:** express $n$ in binary with 9 bits; include envelope $2^i$ iff bit $i$ is set. Don't touch the 489-envelope.\n\n**Case $n \\in [489, 1000]$:** include the 489-envelope. Now need to make $n - 489 \\in [0, 511]$ from $\\{1, 2, 4, \\ldots, 256\\}$ — same binary trick. (Note $n - 489 = 0$ means just the 489-envelope alone = $489$.)\n\n**The two intervals overlap $[489, 511]$, covering all integers.** Specifically: $[1, 488]$ via first 9 envelopes only; $[489, 1000]$ via 489-envelope + something in $[0, 511]$. Union: $[1, 1000]$. ✓",
+      "tips": [
+        { "label": "Why 489 works", "content": "Because $511 + 489 = 1000$ and the overlap condition $489 \\le 512$ holds. More generally, if your partial sums so far reach $S$, your next envelope can hold at most $S + 1$ and still maintain coverage." }
+      ]
+    },
+    {
+      "title": "Verification.",
+      "body": "**Sample checks:**\n\n- $1 = $ envelope $1$.\n- $489 = $ envelope $489$ alone.\n- $500 = 489 + 11 = 489 + 8 + 2 + 1$.\n- $1000 = 489 + 511 = 489 + 256 + 128 + 64 + 32 + 16 + 8 + 4 + 2 + 1$. (All 10 envelopes.)\n\nEvery integer from 1 to 1000 is covered. ✓",
+      "tips": []
+    }
+  ],
+  "answerKey": "Distribute as $\\{1, 2, 4, 8, 16, 32, 64, 128, 256, 489\\}$. First 9 are powers of 2 (cover $[1, 511]$ via binary); the 489-envelope extends coverage to $[489, 1000]$ (binary of $n-489 \\in [0, 511]$). Intervals overlap at $[489, 511]$, so $[1, 1000]$ is fully covered."
+}

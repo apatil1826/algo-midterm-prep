@@ -1,0 +1,32 @@
+{
+  "id": "hw2-q6",
+  "title": "HW2 Q6 — Strengthen I.H. for $T(n) = 4T(n/2) + n$",
+  "source": "Homework 2",
+  "statement": "$T(n) = 4T(n/2) + n$ with $T(1) = 1$. Prove by induction that $T(n) = O(n^2)$. Hint: plain I.H. $T(k) \\le Ck^2$ fails; strengthen.",
+  "topics": ["induction-proofs"],
+  "pattern": "induct-recurrence",
+  "steps": [
+    {
+      "title": "Step 1 — see why plain I.H. fails.",
+      "body": "Try I.H. $T(k) \\le Ck^2$ for all $k < n$. Step:\n\n$$T(n) = 4T(n/2) + n \\le 4 \\cdot C(n/2)^2 + n = Cn^2 + n.$$\n\nWe want $\\le Cn^2$. But we got $Cn^2 + n$ — there's a leftover $+n$. No constant $C$ can absorb it (adding $n$ is linear, which is much less than $Cn^2$, but the induction demands *exact* inequality).",
+      "tips": [
+        { "label": "Why 'just a lower order term' isn't enough", "content": "The point of proving an inductive bound is that the bound cascades. If you prove $T(n) \\le Cn^2 + n$, then the next level gets $T(2n) \\le 4(Cn^2 + n) + 2n = 4Cn^2 + 6n$, and those linear slack terms compound into $O(n^2)$ extra work over $\\log n$ levels — which is fine asymptotically but the induction itself can't conclude $T(n) \\le Cn^2$ without a tighter bookkeeping." }
+      ]
+    },
+    {
+      "title": "Step 2 — strengthen the I.H.",
+      "body": "Try I.H. $T(k) \\le Ck^2 - k$ for all $k < n$. This is a stronger claim (subtracts $k$), which is fine because if it holds, then $T(k) \\le Ck^2$ certainly does.\n\nStep:\n\n$$T(n) = 4T(n/2) + n \\le 4\\left(C(n/2)^2 - n/2\\right) + n = Cn^2 - 2n + n = Cn^2 - n.$$\n\nExactly the strengthened bound at $n$. ✓",
+      "tips": [
+        { "label": "Why subtract exactly $k$", "content": "In the inductive step, the factor-of-4 multiplies $-n/2$ into $-2n$. Adding the $+n$ from the recurrence leaves $-n$. That matches the strengthened bound — the subtraction exactly absorbs the recurrence's additive term." }
+      ]
+    },
+    {
+      "title": "Step 3 — base case + conclusion.",
+      "body": "**Base $n = 1$:** need $T(1) = 1 \\le C - 1$. So $C \\ge 2$.\n\n**Conclusion:** for any $C \\ge 2$, $T(n) \\le Cn^2 - n \\le Cn^2$ for all $n \\ge 1$. So $T(n) = O(n^2)$. $\\square$",
+      "tips": [
+        { "label": "Tree check", "content": "Tree: level $i$ has $4^i$ subproblems of size $n/2^i$, non-recursive work $n/2^i$. Level work $= 4^i \\cdot n/2^i = n \\cdot 2^i$. Increasing geometric, dominated by leaves: $4^{\\log_2 n} = n^2$. Confirms $\\Theta(n^2)$." }
+      ]
+    }
+  ],
+  "answerKey": "Strengthen I.H. to $T(k) \\le Ck^2 - k$ (for $C \\ge 2$). Inductive step: $T(n) = 4T(n/2) + n \\le 4(C(n/2)^2 - n/2) + n = Cn^2 - n$. Hence $T(n) = O(n^2)$."
+}

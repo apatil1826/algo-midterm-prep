@@ -1,0 +1,232 @@
+{
+  "patterns": [
+    {
+      "id": "tf-asymptotic",
+      "title": "True/False Asymptotic Claims",
+      "oneLiner": "Compare growth rates using the formal definitions. Know the standard traps.",
+      "triggers": [
+        "'State true or false. No justification needed.'",
+        "A claim involving $f(n), g(n)$ and $O, \\Omega, \\Theta$",
+        "A claim about Merge Sort / Quick Sort runtime behavior",
+        "A claim about median-of-medians dominance ratio (e.g. '$13n/18$ can be greater than $M$')"
+      ],
+      "technique": "Go back to definition. Ask: can I find $(C, n_0)$? If not, is there a witness $n$ that breaks every attempt at $C$?",
+      "template": [
+        "Know the hierarchy: constants $\\prec$ logs $\\prec$ polynomials $\\prec$ exponentials.",
+        "Know log rules: $\\log(xy) = \\log x + \\log y$, $\\log(x^k) = k\\log x$, base change.",
+        "Recognize classic recurrences by sight (MergeSort, BinarySearch, Karatsuba, Select).",
+        "For median-of-medians with group size $k$: guaranteed $\\lceil k/2\\rceil$ elements $\\le M$ per qualifying group, times $n/(2k)$ groups."
+      ],
+      "pitfalls": [
+        "$\\Theta$ does NOT distribute through multiplication when one factor is only $O$-bounded.",
+        "$\\sqrt{\\log n} \\ne \\Theta(\\log\\sqrt n)$ — the RHS is $\\tfrac{1}{2}\\log n = \\Theta(\\log n)$.",
+        "Merge Sort is $\\Theta(n\\log n)$ in the WORST case. Quick Sort is the one with bad worst case.",
+        "$f = O(g)$ does NOT imply $2^f = O(2^g)$.",
+        "$f = O(g)$ and $h = O(g)$ does NOT imply $f = O(h)$."
+      ],
+      "examples": [
+        { "id": "pm-q1", "why": "Six T/F claims covering exactly these traps: Theta-product, log-square-root, recurrence shape, Merge Sort vs Quick Sort, median-of-medians group-of-9." }
+      ]
+    },
+    {
+      "id": "recursion-tree-solve",
+      "title": "Recursion Tree for $T(n) = aT(n/b) + f(n)$",
+      "oneLiner": "Draw the tree, count per-level work, sum.",
+      "triggers": [
+        "'Draw the recursion tree for this recurrence.'",
+        "'Calculate T(n) up to big-$\\Theta$.'",
+        "Any recurrence of the form $T(n) = aT(n/b) + f(n)$ you haven't seen before"
+      ],
+      "technique": "At level $i$: $a^i$ nodes of size $n/b^i$, level work $a^i f(n/b^i)$. Height $\\log_b n$. Leaves $n^{\\log_b a}$. Identify regime (decreasing / constant / increasing geometric), sum accordingly.",
+      "template": [
+        "Count per-level: $a^i$ nodes, each of size $n/b^i$, each doing $f(n/b^i)$ non-recursive work.",
+        "Level work = $a^i \\cdot f(n/b^i)$.",
+        "Determine if the level-work is decreasing, constant, or increasing in $i$.",
+        "Decreasing → dominated by root, $\\Theta(f(n))$. Upper-bound with infinite geometric $\\sum r^i = 1/(1-r)$.",
+        "Constant per level → $\\Theta(f(n) \\log n)$.",
+        "Increasing → dominated by leaves, $\\Theta(n^{\\log_b a})$.",
+        "Compute leaves separately: $a^{\\log_b n} = n^{\\log_b a}$ leaves, each cost = base-case cost.",
+        "Conclude with $\\Theta$-bound."
+      ],
+      "pitfalls": [
+        "Forgetting to include the leaf contribution (usually negligible if decreasing, but always check).",
+        "Using finite geometric where infinite is cleaner (both valid; infinite gives a clean constant upper bound).",
+        "Mis-reading height as $\\log_a n$ instead of $\\log_b n$."
+      ],
+      "examples": [
+        { "id": "pm-q2", "why": "$T(n) = 3T(n/5) + n$: $a=3, b=5$, level work $n(3/5)^i$ — decreasing geometric → $\\Theta(n)$." },
+        { "id": "hw2-q2", "why": "$T(n) = 2T(n/3) + n$: $a=2, b=3$, level work $n(2/3)^i$ — same shape, $\\Theta(n)$." },
+        { "id": "hw1-q5", "why": "$T(n) = 2T(n/2) + 1$: level work $2^i$, increasing. Dominated by leaves $n$. $\\Theta(n)$." }
+      ]
+    },
+    {
+      "id": "induct-recurrence",
+      "title": "Formal Induction for $T(n) = O(f(n))$",
+      "oneLiner": "Prove a concrete inequality by strong induction. Must derive EXACT bound.",
+      "triggers": [
+        "'Provide a formal proof by induction.'",
+        "'Prove that $T(n) = O(f(n))$.'",
+        "After you've guessed a bound via recursion tree or substitution"
+      ],
+      "technique": "Strong induction: claim $T(n) \\le Cf(n)$ for specific $C$. Base, I.H., plug into recurrence, arrive at EXACT $T(n) \\le Cf(n)$. If stuck, strengthen I.H. with a subtracted lower-order term.",
+      "template": [
+        "**Claim:** $\\exists\\, n_0, C$ s.t. $T(n) \\le Cf(n)$ for all $n \\ge n_0$.",
+        "**Base case:** check $T(n_0)$; note what $C$ needs.",
+        "**I.H.:** for all $n_0 \\le k < n$, $T(k) \\le Cf(k)$. (STRONG induction, CONCRETE inequality — never asymptotic.)",
+        "**Step:** substitute I.H. into recurrence. Manipulate to exactly $T(n) \\le Cf(n)$ — no extra $+1$, no $(C+1)f(n)$.",
+        "**Pick $C$:** satisfy both base and step."
+      ],
+      "pitfalls": [
+        "Writing I.H. as $T(k) = O(k^2)$ — meaningless! Always concrete.",
+        "Ending inductive step with $T(n) \\le (C+1)f(n)$ and thinking it's done. It's not; those constants compound.",
+        "Forgetting that $C$ must be the SAME throughout the proof.",
+        "If straightforward I.H. leaves leftover terms, strengthen: try $T(k) \\le Ck^2 - dk$ instead."
+      ],
+      "examples": [
+        { "id": "pm-q3", "why": "$T(n) = T(n/2) + T(n/3) + n$: claim $T(n) \\le 6n$. Step: $T(n) \\le 6n/2 + 6n/3 + n = 6n$. Exact." },
+        { "id": "hw2-q6", "why": "$T(n) = 4T(n/2) + n$: plain $T(k) \\le Ck^2$ fails. Strengthen to $Ck^2 - k$." },
+        { "id": "hw1-q6", "why": "Guess $T(n) = n + c$; solve $c = -1$ exactly satisfies recurrence." }
+      ]
+    },
+    {
+      "id": "dc-design",
+      "title": "Design a Divide-and-Conquer Algorithm",
+      "oneLiner": "Split, recurse, combine cleverly. Usually aiming for $\\Theta(n\\log n)$ when brute force is $\\Theta(n^2)$.",
+      "triggers": [
+        "'Design as efficient an algorithm as you can.'",
+        "Brute force is $O(n^2)$ and there's structure you can exploit.",
+        "'If you used divide and conquer, state a recurrence.'",
+        "Hint phrases like 'this can be done explicitly by D&C, or more simply by sorting'."
+      ],
+      "technique": "Decide: (1) how to split (usually halve by some coordinate / attribute), (2) what each recursive call returns, (3) how to combine in linear (or $O(n\\log n)$) time. Write the recurrence. Solve.",
+      "template": [
+        "**Base case** for small sizes.",
+        "**Divide:** usually by median of some attribute; split array in half.",
+        "**Recurse:** call the algorithm on each half.",
+        "**Combine:** use the structure returned (sorted, extrema, etc.) to produce the answer for the whole in $O(n)$ if possible.",
+        "**Recurrence:** $T(n) = 2T(n/2) + \\text{combine}(n)$. Solve."
+      ],
+      "pitfalls": [
+        "Combine step is $O(n \\log n)$ by mistake (e.g. sorting inside recursion) → $\\Theta(n \\log^2 n)$ instead of $\\Theta(n \\log n)$. Precompute sorts outside recursion when possible.",
+        "Over-designing D&C when sort-then-scan is simpler and has the same asymptotic.",
+        "Forgetting that all points in $U_R$ automatically survive in Pareto-like problems (because their $x$ is larger than everything in $L$)."
+      ],
+      "examples": [
+        { "id": "pm-q4", "why": "Pareto-undominated points: sort-then-scan in $O(n \\log n)$, or D&C with per-half combination." },
+        { "id": "hw2-q3", "why": "3-way merge sort: $T(n) = 3T(n/3) + n = \\Theta(n\\log n)$. Still $\\Theta(n\\log n)$ — splitting into more pieces doesn't help." },
+        { "id": "hw2-q5", "why": "Close-to-sorted: linear pass + sort tiny residual + merge = $O(n)$." }
+      ]
+    },
+    {
+      "id": "dp-design",
+      "title": "Design a Dynamic Programming Algorithm",
+      "oneLiner": "Define subproblem, write recurrence, prove optimal substructure, fill order, runtime.",
+      "triggers": [
+        "'Determine whether this string can be segmented.'",
+        "'Maximum value obtainable.'",
+        "'Count the number of ways.'",
+        "'Longest/shortest sub[sequence|string].'",
+        "Naive recursion has overlapping subproblems."
+      ],
+      "technique": "Follow the 5-step template (matches the exam grading rubric).",
+      "template": [
+        "**Step 1: Subproblem.** Define $B[i]$ (or $DP[i,j]$) in WORDS. E.g. $B[i]$ = True iff $s[1..i]$ can be segmented.",
+        "**Step 2: Recurrence + base cases.** Express $B[i]$ in terms of strictly smaller subproblems. Include $B[0]$ or $B[0,*]$ bases.",
+        "**Step 3: Correctness.** Prove optimal substructure via exchange argument: assume OPT doesn't have claimed structure; swap out a suboptimal piece for a better one; derive a strictly better OPT' — contradiction.",
+        "**Step 4: Fill order.** Identify dependencies; fill table so each entry's dependencies come first. 1D prefix problems: left-to-right. 2D: row-by-row.",
+        "**Step 5: Runtime.** $(\\text{#subproblems}) \\times (\\text{time per subproblem})$."
+      ],
+      "pitfalls": [
+        "Vague subproblem definitions lead to broken recurrences. Always state the subproblem explicitly in words.",
+        "Forgetting base cases, especially $B[0]$.",
+        "Using top-down recursion when bottom-up iterative is clearer (professor prefers iterative).",
+        "Not proving the recurrence's correctness — especially the optimal-substructure part."
+      ],
+      "examples": [
+        { "id": "pm-q5", "why": "Word break: $B[i] = \\bigvee_j (B[i-j] \\wedge s[i-j+1..i] \\in D)$. $O(n^2)$ via $O(n)$ subproblems $\\times$ $O(n)$ work each." }
+      ]
+    },
+    {
+      "id": "binary-search-variant",
+      "title": "Binary-Search Variant on Sorted Input",
+      "oneLiner": "Halve the search space. Might need extra bookkeeping (offset, monotone function construction).",
+      "triggers": [
+        "Sorted array, need $O(\\log n)$ or $O(\\log m + \\log n)$.",
+        "'Find an index where $X$ holds.'",
+        "Search in an unbounded / infinite space.",
+        "Median of two sorted arrays.",
+        "Row/column-sorted matrix (related — use staircase walk)."
+      ],
+      "technique": "Compare middle; eliminate half of the remaining range. Recurrence $T(n) = T(n/2) + O(1) = \\Theta(\\log n)$.",
+      "template": [
+        "Identify a **monotone** quantity in the input (sorted values, $A[i] - i$, etc.).",
+        "Pick the middle index.",
+        "Decide which half the answer must lie in (use the monotonicity).",
+        "Recurse on that half.",
+        "For unbounded search: first double your range $1, 2, 4, 8, \\ldots$ until you overshoot, then binary-search. Output-sensitive $O(\\log k)$."
+      ],
+      "pitfalls": [
+        "Non-distinct elements can break monotonicity tricks.",
+        "For $A[i] = i$: the function $f(i) = A[i] - i$ is non-decreasing because consecutive distinct integers differ by $\\ge 1$.",
+        "For two-array median: shift target $k$ when you discard a lower half, don't when discarding an upper half."
+      ],
+      "examples": [
+        { "id": "hw2-q4", "why": "Find $A[i] = i$: $f(i) = A[i] - i$ is monotone; binary-search for zero crossing." },
+        { "id": "pss3-q2", "why": "Row/col-sorted matrix: not pure binary search, but uses the same 'halve-the-possibilities' intuition — staircase walk from top-right." }
+      ]
+    },
+    {
+      "id": "median-of-medians-variant",
+      "title": "Median of Medians with Non-Standard Group Size",
+      "oneLiner": "Apply the pigeonhole formula: $(n/(2k)) \\cdot \\lceil k/2\\rceil$ elements guaranteed on one side.",
+      "triggers": [
+        "'Split $n$ numbers into groups of $k$…'",
+        "'Let $M$ be the median of the group medians.'",
+        "'At most [fraction] of the original numbers could be greater than $M$.'"
+      ],
+      "technique": "Count: $n/k$ groups, half of them ($n/(2k)$) have group medians $\\le M$. Each such group contributes $\\lceil k/2\\rceil$ elements $\\le M$. Product: $(n/(2k))\\cdot\\lceil k/2\\rceil$ guaranteed $\\le M$.",
+      "template": [
+        "Number of groups: $n/k$.",
+        "Group medians $\\le M$: at least $n/(2k)$ (since $M$ is the median of group medians).",
+        "Each such group has $\\lceil k/2\\rceil$ elements $\\le$ its median, hence $\\le M$.",
+        "Guarantee: $\\dfrac{n}{2k} \\cdot \\left\\lceil\\dfrac{k}{2}\\right\\rceil$ elements $\\le M$.",
+        "Upper bound on elements $> M$: $n - $ (guarantee)."
+      ],
+      "pitfalls": [
+        "Using $k/2$ instead of $\\lceil k/2\\rceil$ for odd $k$.",
+        "Forgetting that the guarantee is one-sided (symmetric argument needed for $\\ge M$).",
+        "$k = 3$ or smaller gives $a+b = 1$ or more in the Select recurrence — no longer linear. $k = 5$ is the smallest 'safe' group size."
+      ],
+      "examples": [
+        { "id": "pm-q1", "why": "Group-of-9: $(n/18) \\cdot 5 = 5n/18$ guaranteed $\\le M$, so at most $13n/18$ can be $>M$. T/F claim #6." }
+      ]
+    },
+    {
+      "id": "exchange-argument",
+      "title": "Exchange Argument for Optimal Substructure",
+      "oneLiner": "Assume OPT doesn't have the claimed structure; swap to build a strictly better solution; contradict optimality.",
+      "triggers": [
+        "Proving correctness of a DP recurrence.",
+        "Showing 'any optimal solution must look like [something simpler]'.",
+        "Arguing optimal substructure in greedy problems."
+      ],
+      "technique": "Consider an optimal solution OPT. Assume for contradiction it doesn't have the claimed structure (e.g. doesn't end in the right way). Surgically swap the offending piece for a better alternative. The modified ALT is still feasible and strictly better. Contradiction.",
+      "template": [
+        "Let OPT be an optimal solution.",
+        "Suppose OPT doesn't have the claimed structure.",
+        "Identify the violating piece of OPT (e.g. a 'last step' that's suboptimal).",
+        "Show there's a better alternative for that piece (using the definition of subproblem optimality).",
+        "Construct ALT = OPT with the violating piece replaced. Verify ALT is still valid.",
+        "Compute value(ALT) > value(OPT). Contradiction."
+      ],
+      "pitfalls": [
+        "Swapping something that breaks feasibility (make sure the replacement is valid in context).",
+        "Forgetting to handle ties (when value(ALT) = value(OPT)). Usually you can still argue OPT has the structure or use an averaging/choice argument.",
+        "Using the structure of the recurrence you're trying to prove — subtle circularity."
+      ],
+      "examples": [
+        { "id": "pm-q5", "why": "Word break: any valid segmentation of $s[1..i]$ ends in some word of length $j$, and $s[1..i-j]$ must itself be segmentable. Otherwise, a better $s[1..i-j]$ segmentation would contradict $s[1..i]$ being segmentable — or ruin its segmentability." }
+      ]
+    }
+  ]
+}

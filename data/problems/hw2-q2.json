@@ -1,0 +1,29 @@
+{
+  "id": "hw2-q2",
+  "title": "HW2 Q2 — $T(n) = 2T(n/3) + n$",
+  "source": "Homework 2",
+  "statement": "For the recurrence $T(n) = 2T(n/3) + n$ with $T(1) = 1$: (a) draw the recursion tree and find an asymptotically tight bound. (b) prove the $\\Theta$-bound by induction.",
+  "topics": ["recursion-trees", "induction-proofs"],
+  "pattern": "recursion-tree-solve",
+  "steps": [
+    {
+      "title": "(a) Recursion tree.",
+      "body": "At level $i$: $2^i$ subproblems of size $n/3^i$, non-recursive work per subproblem $= n/3^i$. Level work $= 2^i \\cdot n/3^i = n \\cdot (2/3)^i$.\n\nThis is decreasing geometric with ratio $2/3$. Sum:\n\n$$\\sum_{i=0}^{\\log_3 n - 1} n (2/3)^i \\le n \\sum_{i=0}^{\\infty} (2/3)^i = n \\cdot \\dfrac{1}{1 - 2/3} = 3n.$$\n\nLeaves: $2^{\\log_3 n} = n^{\\log_3 2} \\approx n^{0.63}$, each cost $1$. Leaf contribution $= n^{\\log_3 2} = o(n)$.\n\n**Total: $T(n) = \\Theta(n)$.**",
+      "tips": [
+        { "label": "Infinite geometric", "content": "$\\sum_{i=0}^{\\infty} r^i = \\dfrac{1}{1-r}$, $r = 2/3$ gives $3$." },
+        { "label": "Leaves are negligible", "content": "$n^{\\log_3 2}$ has exponent $< 1$, so it's $o(n)$ and absorbed by the $\\Theta(n)$ bound." }
+      ]
+    },
+    {
+      "title": "(b) Inductive upper bound $T(n) \\le 3n$.",
+      "body": "**Claim:** $T(n) \\le 3n$ for all $n \\ge 1$.\n\n**Base:** $T(1) = 1 \\le 3$. ✓\n\n**I.H.:** For all $k < n$, $T(k) \\le 3k$.\n\n**Step:** $T(n) = 2T(n/3) + n \\le 2 \\cdot 3 \\cdot (n/3) + n = 2n + n = 3n$. ✓\n\nSo $T(n) = O(n)$.",
+      "tips": []
+    },
+    {
+      "title": "(b) Inductive lower bound $T(n) \\ge n$.",
+      "body": "Trivially $T(n) = 2T(n/3) + n \\ge n$ from the recurrence itself (since $T$ is positive). So $T(n) = \\Omega(n)$.\n\nCombining: $T(n) = \\Theta(n)$. $\\square$",
+      "tips": []
+    }
+  ],
+  "answerKey": "$T(n) = \\Theta(n)$. Upper bound by induction with $C = 3$."
+}

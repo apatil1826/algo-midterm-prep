@@ -1,0 +1,37 @@
+{
+  "id": "hw1-q5",
+  "title": "HW1 Q5 — Solve $T(n) = 2T(n/2) + 1$",
+  "source": "Homework 1",
+  "statement": "Consider $T(n) = 2T(n/2) + 1$ with $T(1) = 1$. By repeatedly substituting, calculate $T(n)$ up to big-$\\Theta$.",
+  "topics": ["recursion-trees", "induction-proofs"],
+  "pattern": "recursion-tree-solve",
+  "steps": [
+    {
+      "title": "Unroll the recurrence.",
+      "body": "$$\\begin{aligned} T(n) &= 2T(n/2) + 1 \\\\ &= 2(2T(n/4) + 1) + 1 = 4T(n/4) + 2 + 1 \\\\ &= 4(2T(n/8) + 1) + 3 = 8T(n/8) + 4 + 2 + 1 \\\\ &\\;\\;\\vdots \\\\ &= 2^i T(n/2^i) + (2^{i-1} + \\cdots + 4 + 2 + 1). \\end{aligned}$$",
+      "tips": []
+    },
+    {
+      "title": "Stop at the base case.",
+      "body": "$n / 2^i = 1$ means $i = \\log_2 n$. Plug in:\n\n$$T(n) = 2^{\\log_2 n} \\cdot T(1) + (2^{\\log_2 n - 1} + \\cdots + 4 + 2 + 1) = n + \\left(\\tfrac{n}{2} + \\tfrac{n}{4} + \\cdots + 2 + 1\\right).$$",
+      "tips": [
+        { "label": "Log identity", "content": "$2^{\\log_2 n} = n$. Comes from $a^{\\log_a x} = x$." }
+      ]
+    },
+    {
+      "title": "Sum the finite geometric.",
+      "body": "$$T(n) = n \\left(1 + \\tfrac{1}{2} + \\tfrac{1}{4} + \\cdots + \\tfrac{1}{2^{\\log_2 n}}\\right).$$\n\nThe sum is at most $\\sum_{i=0}^{\\infty} (1/2)^i = \\dfrac{1}{1 - 1/2} = 2$. So $T(n) \\le 2n$.\n\nLower bound: $T(n) \\ge n$ from the first term.\n\nTherefore $T(n) = \\Theta(n)$.",
+      "tips": [
+        { "label": "Decreasing geometric", "content": "$\\sum_{i=0}^{\\infty} r^i = \\dfrac{1}{1-r}$ for $0 \\le r < 1$. Here $r = 1/2$, sum $= 2$." }
+      ]
+    },
+    {
+      "title": "Recursion-tree view (optional cross-check).",
+      "body": "Level $i$: $2^i$ subproblems of size $n/2^i$, non-recursive work per subproblem $= 1$. Level work $= 2^i$. Increasing geometric!\n\nHeight $= \\log_2 n$. Total across levels: $\\sum_{i=0}^{\\log_2 n - 1} 2^i = 2^{\\log_2 n} - 1 = n - 1$.\n\nLeaves: $2^{\\log_2 n} = n$, each cost $1$. Total at leaves: $n$.\n\nGrand total: $(n - 1) + n = 2n - 1 = \\Theta(n)$. ✓",
+      "tips": [
+        { "label": "Finite geometric", "content": "$\\sum_{i=0}^{k-1} 2^i = 2^k - 1$." }
+      ]
+    }
+  ],
+  "answerKey": "$T(n) = \\Theta(n)$. Exact: $T(n) = 2n - 1$."
+}

@@ -1,0 +1,42 @@
+{
+  "id": "pm-q4",
+  "title": "Practice Midterm Q4 — Pareto-Undominated Points / 2D Maxima (10 pts)",
+  "source": "Practice Midterm, Part B (from last year's midterm)",
+  "statement": "A set $S$ of $n$ points $(x_i, y_i)$ in the plane, with all $x_i$ distinct and all $y_i$ distinct. Point $i$ **dominates** $j$ if $x_i > x_j$ AND $y_i > y_j$. A point is **undominated** if no other point dominates it.\n\n(a) List undominated points in a given diagram.\n(b) Draw a 5-point set where all 5 are undominated; another where only 1 is undominated.\n(c) Design the most efficient algorithm you can. Hint: divide and conquer, or a simple sorting approach.\n(d) Asymptotic worst-case runtime; state recurrence if D&C.",
+  "topics": ["divide-and-conquer", "merge-sort"],
+  "pattern": "dc-design",
+  "steps": [
+    {
+      "title": "(a) Reading undominated points off the diagram.",
+      "body": "A point is undominated iff nothing is strictly above-and-right of it. In the given figure, the undominated set (the 'Pareto frontier') is the staircase from the top-left going down and to the right: $\\{2, 10, 12, 13\\}$. (Point 2 is highest-$y$; each subsequent point is strictly right and strictly lower than the previous, so none dominates another.)",
+      "tips": []
+    },
+    {
+      "title": "(b) Extreme cases.",
+      "body": "**All 5 undominated:** put the 5 points on a strictly decreasing staircase — as $x$ increases, $y$ decreases. E.g. $(1,5), (2,4), (3,3), (4,2), (5,1)$. No point dominates another.\n\n**Only 1 undominated:** put 1 'champion' point in the top-right; the other 4 somewhere below-left of it. E.g. champion $(5,5)$, others $(1,1), (2,2), (3,3), (4,4)$. The champion dominates all others.",
+      "tips": []
+    },
+    {
+      "title": "(c) Sort-then-scan algorithm (the clean option).",
+      "body": "**Algorithm.**\n\n1. Sort the $n$ points by $x$-coordinate in descending order. Let the sorted list be $p_1, p_2, \\ldots, p_n$ (so $p_1$ has the largest $x$).\n2. Scan left-to-right through the sorted list, maintaining a running $\\max_y$.\n3. Emit $p_i$ as undominated iff $y_i > \\max_y$ so far, and update $\\max_y \\leftarrow y_i$.\n\n**Why correct.** In the sorted order, every point scanned before $p_i$ has strictly larger $x$. So $p_i$ is dominated iff some earlier point also has larger $y$ — equivalently, $y_i \\le \\max_y$ among the earlier points. The scan checks exactly this.\n\n**Runtime.** Sorting is $O(n \\log n)$. The scan is $O(n)$. Total $O(n \\log n)$.",
+      "tips": [
+        { "label": "Why this is simpler than D&C", "content": "Sorting already does the heavy lifting. Once sorted by $x$, 'dominated' reduces to 'some earlier element has larger $y$', which a single pass computes." }
+      ]
+    },
+    {
+      "title": "(c-alt) Divide-and-conquer algorithm.",
+      "body": "**Algorithm.**\n\n1. **Base case.** If $|S| \\le 1$, return $S$ (singletons are undominated).\n2. Split $S$ by the median $x$-coordinate into left half $L$ (smaller $x$) and right half $R$ (larger $x$).\n3. Recursively compute $U_L = $ undominated in $L$, $U_R = $ undominated in $R$.\n4. **Combine.** Every point in $U_R$ has larger $x$ than every point in $L$, so no point in $U_R$ can be dominated by anything in $L$. So all of $U_R$ survives.\n\nFor $U_L$: a point $p \\in U_L$ is dominated globally iff some point in $R$ has both larger $x$ and larger $y$. Every point in $R$ has larger $x$. So $p$ is globally undominated iff $y_p > y_{\\max}(R)$, where $y_{\\max}(R)$ is the max $y$-coordinate among all points in $R$.\n\nCompute $y_{\\max}(R)$ in $O(n)$. Filter $U_L$ accordingly in $O(n)$.\n\n5. Return $\\{p \\in U_L : y_p > y_{\\max}(R)\\} \\cup U_R$.\n\n**Why correct.** A point is undominated globally iff (i) it is undominated within its own half, AND (ii) nothing in the other half dominates it. For $U_R$: there's no other half to check (all of $L$ has smaller $x$ → cannot dominate $R$-points). For $U_L$: the $x$-coordinate of any $R$-point is already larger; domination hinges only on $y$.\n\n**Recurrence.** $T(n) = 2T(n/2) + O(n) = \\Theta(n \\log n)$.",
+      "tips": [
+        { "label": "Split is cheap once sorted", "content": "If you sort by $x$ once at the start (outside recursion), the 'split by median $x$' is an $O(1)$ index lookup. Each recursive call doesn't need to re-sort." }
+      ]
+    },
+    {
+      "title": "(d) Runtime summary.",
+      "body": "**Sort-then-scan:** $O(n \\log n)$ for the initial sort + $O(n)$ linear pass = $\\Theta(n \\log n)$.\n\n**D&C:** recurrence $T(n) = 2T(n/2) + O(n)$. By recursion tree (same as Merge Sort), $T(n) = \\Theta(n \\log n)$.\n\nBoth achieve $\\Theta(n \\log n)$. The sorting-based approach is usually cleaner to write up.",
+      "tips": [
+        { "label": "Can we do better?", "content": "No (in the comparison model). A lower-bound argument via reduction from sorting: if you could output the undominated set sorted by $x$ in $o(n \\log n)$, you could sort real numbers in $o(n \\log n)$, contradicting the comparison-based sorting lower bound." }
+      ]
+    }
+  ],
+  "answerKey": "Sort by $x$, scan maintaining max $y$. $\\Theta(n \\log n)$. Or D&C: split by median $x$, recurse, filter left half by $y_{\\max}$ of right. Recurrence $T(n) = 2T(n/2) + O(n) = \\Theta(n \\log n)$."
+}

@@ -1,0 +1,22 @@
+{
+  "topics": [
+    { "id": "asymptotic-notation", "title": "Asymptotic Notation (Big-O, Ω, Θ)", "tier": 1, "lecture": 1, "blurb": "Definitions and reasoning about eventual upper/lower bounds up to constants." },
+    { "id": "recursion-trees", "title": "Solving Recurrences — Recursion Tree Method", "tier": 1, "lecture": 2, "blurb": "Visual method: sum the non-recursive work at each level plus the leaves." },
+    { "id": "induction-proofs", "title": "Solving Recurrences — Substitution + Induction", "tier": 1, "lecture": 2, "blurb": "Guess the bound, then prove it via strong induction on a concrete inequality." },
+    { "id": "divide-and-conquer", "title": "Divide and Conquer — Design Paradigm", "tier": 1, "lecture": 2, "blurb": "Divide, recurse, combine. Runtime recurrence comes directly from the steps." },
+    { "id": "dynamic-programming", "title": "Dynamic Programming — 5-Step Template", "tier": 1, "lecture": 4, "blurb": "Define subproblem, write recurrence, prove optimal substructure, order, runtime." },
+    { "id": "merge-sort", "title": "Merge Sort", "tier": 2, "lecture": 2, "blurb": "Classic D&C sort. Recurrence $T(n)=2T(n/2)+n$ gives $\\Theta(n\\log n)$." },
+    { "id": "median-of-medians", "title": "Median of Medians (Select)", "tier": 2, "lecture": 3, "blurb": "Deterministic $O(n)$ $i$-th order statistic via group-of-5 medians." },
+    { "id": "unbalanced-recurrences", "title": "Unbalanced-Split Recurrences", "tier": 2, "lecture": 3, "blurb": "$T(n)=T(an)+T(bn)+n$: rule based on whether $a+b<1$, $=1$, or $>1$." },
+    { "id": "loop-invariants", "title": "Loop Invariants & Inductive Correctness", "tier": 2, "lecture": 1, "blurb": "Standard pattern: state invariant, prove base + maintenance + termination." },
+    { "id": "closest-pair", "title": "Closest Pair of Points in the Plane", "tier": 3, "lecture": 3, "blurb": "$O(n\\log n)$ D&C algorithm using the strip-and-15-neighbors trick." },
+    { "id": "karatsuba", "title": "Karatsuba's Integer Multiplication", "tier": 3, "lecture": 3, "blurb": "Three recursive multiplications instead of four: $T(n)=3T(n/2)+n = \\Theta(n^{\\log_2 3})$." },
+    { "id": "quick-sort", "title": "Quick Sort", "tier": 3, "lecture": 2, "blurb": "Pivot + partition. Worst $\\Theta(n^2)$, best/expected $\\Theta(n\\log n)$." },
+    { "id": "binary-search", "title": "Binary Search & Variants", "tier": 3, "lecture": 1, "blurb": "Halve-the-problem template. $T(n)=T(n/2)+1 \\Rightarrow \\Theta(\\log n)$." },
+    { "id": "lcs", "title": "Longest Common Subsequence", "tier": 3, "lecture": 4, "blurb": "2D DP on prefixes. Canonical example of exchange-argument correctness." },
+    { "id": "rod-cutting", "title": "Rod Cutting", "tier": 3, "lecture": 4, "blurb": "1D DP on prefix length. Classic optimal-substructure example." },
+    { "id": "insertion-sort", "title": "Insertion Sort", "tier": 4, "lecture": 1, "blurb": "Reference iterative sort. $\\Theta(n^2)$ worst case; canonical loop-invariant proof." },
+    { "id": "master-theorem", "title": "Master Theorem (Reference)", "tier": 4, "lecture": 0, "blurb": "Closed-form for $T(n)=aT(n/b)+f(n)$. Optional; we solve via trees/induction instead." },
+    { "id": "log-exp-math", "title": "Log & Exponent Rules (Refresher)", "tier": 4, "lecture": 0, "blurb": "Change of base, product/quotient/power rules, common summations." }
+  ]
+}

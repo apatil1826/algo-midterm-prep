@@ -1,0 +1,35 @@
+{
+  "id": "hw2-q4",
+  "title": "HW2 Q4 — Find $i$ with $A[i] = i$ in $O(\\log n)$",
+  "source": "Homework 2",
+  "statement": "Given a sorted array $A$ of $n$ distinct integers, find an index $i$ (if it exists) with $A[i] = i$, in $O(\\log n)$.",
+  "topics": ["binary-search"],
+  "pattern": "binary-search-variant",
+  "steps": [
+    {
+      "title": "Key observation.",
+      "body": "The array is sorted and has **distinct** integers. So consecutive elements differ by at least 1: $A[i+1] \\ge A[i] + 1$.\n\nDefine $f(i) = A[i] - i$. Then $f$ is **non-decreasing**: $f(i+1) - f(i) = (A[i+1] - (i+1)) - (A[i] - i) = A[i+1] - A[i] - 1 \\ge 0$.\n\nWe want the unique $i$ (if any) with $f(i) = 0$ — and since $f$ is monotone, we can binary-search for the zero crossing.",
+      "tips": [
+        { "label": "Why distinct integers matter", "content": "Without distinctness, $A[i+1] - A[i]$ could be $0$ and $f$ wouldn't be monotone. Distinct sorted integers force the $\\ge 1$ gap." }
+      ]
+    },
+    {
+      "title": "Algorithm.",
+      "body": "Binary-search on $f(i) = A[i] - i$:\n\n1. Base case: if range $[lo, hi]$ is empty, return $-1$ (no solution).\n2. Let $i = \\lfloor (lo + hi)/2 \\rfloor$.\n3. If $A[i] = i$: return $i$.\n4. If $A[i] > i$ (i.e. $f(i) > 0$): solution, if any, is to the left; recurse on $[lo, i-1]$.\n5. If $A[i] < i$ (i.e. $f(i) < 0$): solution, if any, is to the right; recurse on $[i+1, hi]$.",
+      "tips": []
+    },
+    {
+      "title": "Correctness.",
+      "body": "By induction on range size.\n\n**Base:** empty range → no solution → return $-1$. ✓\n\n**Step:** consider middle index $i$.\n\n- $A[i] = i$: done. ✓\n- $A[i] > i$: for any $j > i$, $A[j] \\ge A[i] + (j - i) > i + (j - i) = j$, so $A[j] > j$ → no solution to the right. Recurse left; by I.H. that call is correct.\n- $A[i] < i$: for any $j < i$, $A[j] \\le A[i] - (i - j) < i - (i - j) = j$, so $A[j] < j$ → no solution to the left. Recurse right; by I.H. that call is correct.\n\nEither the algorithm finds an $i$ with $A[i] = i$, or it exhausts the range correctly returning $-1$.",
+      "tips": []
+    },
+    {
+      "title": "Runtime.",
+      "body": "Recurrence: $T(n) = T(n/2) + O(1)$.\n\nThis is the binary-search recurrence. By recursion tree or induction: $T(n) = \\Theta(\\log n)$.",
+      "tips": [
+        { "label": "Classic binary-search recurrence", "content": "$T(n) = T(n/2) + 1 = \\Theta(\\log n)$. Level work is constant and there are $\\log_2 n$ levels." }
+      ]
+    }
+  ],
+  "answerKey": "Binary-search using monotonicity of $f(i) = A[i] - i$. Recurrence $T(n) = T(n/2) + O(1) = \\Theta(\\log n)$."
+}

@@ -1,0 +1,33 @@
+{
+  "id": "hw2-q5",
+  "title": "HW2 Q5 — Sort a 'Close-to-Sorted' Array in $O(n)$",
+  "source": "Homework 2",
+  "statement": "$A$ of size $n$ differs from its sorted version in at most $\\log_2 n$ positions. Sort $A$ in $O(n)$.",
+  "topics": ["merge-sort", "divide-and-conquer"],
+  "pattern": "dc-design",
+  "steps": [
+    {
+      "title": "Step 1 — scan and push to a monotone stack.",
+      "body": "Walk through $A$ left to right. Maintain a stack $S$:\n\n```\nfor i = 1 to n:\n   if S is empty OR S.top() <= A[i]:\n      push A[i] onto S\n   else:\n      pop S\n```\n\nThis builds an increasing sequence in $S$. Elements popped (or never pushed) go into a second list $T$.",
+      "tips": []
+    },
+    {
+      "title": "Step 2 — $S$ misses at most $2\\log_2 n$ elements.",
+      "body": "**Claim:** every time we 'leave out' a pair of elements (in the else branch), at least one of them was out of place in the original array.\n\n**Proof.** If we pop $A[j]$ when processing $A[i]$ with $A[i] < S.\\text{top}() = A[j]$ and $j < i$: if both were in place in the sorted array, since $j < i$ we'd have $A[j] \\le A[i]$. Contradicts $A[i] < A[j]$. So at least one is out of place.\n\nSince at most $\\log_2 n$ elements are out of place, we leave out at most $2 \\log_2 n$ elements. So $|T| \\le 2 \\log_2 n$.",
+      "tips": []
+    },
+    {
+      "title": "Step 3 — $S$ is a sorted subsequence.",
+      "body": "By construction, $S$ contains elements in pushed-order which was non-decreasing (each push requires $A[i] \\ge S.\\text{top}()$). So $S$ is sorted. ✓",
+      "tips": []
+    },
+    {
+      "title": "Step 4 — sort $T$ and merge.",
+      "body": "$|T| \\le 2 \\log_2 n$. Sort $T$ (e.g. merge sort) in $O(|T| \\log |T|) = O(\\log n \\cdot \\log \\log n) = o(n)$.\n\nThen merge $S$ and $T$ (both sorted) in $O(n)$.\n\n**Total runtime: $O(n)$.**",
+      "tips": [
+        { "label": "Why $\\log n \\cdot \\log \\log n = o(n)$", "content": "Both factors are logarithms — polynomials beat any product of logarithms." }
+      ]
+    }
+  ],
+  "answerKey": "Scan and maintain monotone stack $S$ (contains most of $A$, sorted). Spill-over list $T$ has $\\le 2\\log_2 n$ elements. Sort $T$ (cheap) and merge. Total $O(n)$."
+}

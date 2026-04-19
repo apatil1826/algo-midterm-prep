@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background-color: #0a0a0a;
+}
+
+/* Tighter KaTeX sizing so math sits comfortably inline */
+.katex { font-size: 1em; }
+.katex-display { margin: 0.6em 0; overflow-x: auto; overflow-y: hidden; }
+.katex-display > .katex { white-space: normal; }
+
+/* Subtle selection */
+::selection { background: rgba(250, 204, 21, 0.25); }
+
+/* Prose tweaks */
+.prose-body p { margin-bottom: 0.9em; line-height: 1.65; }
+.prose-body ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 0.9em; }
+.prose-body ol { list-style: decimal; padding-left: 1.5rem; margin-bottom: 0.9em; }
+.prose-body li { margin-bottom: 0.25em; line-height: 1.6; }
+.prose-body h2 { font-size: 1.25rem; font-weight: 600; margin-top: 1.6em; margin-bottom: 0.6em; }
+.prose-body h3 { font-size: 1.08rem; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; }
+.prose-body code {
+  background: rgba(255,255,255,0.06);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  font-size: 0.92em;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }

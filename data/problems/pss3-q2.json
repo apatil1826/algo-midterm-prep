@@ -1,0 +1,35 @@
+{
+  "id": "pss3-q2",
+  "title": "PSS3 Q2 — Search a Row/Col-Sorted Matrix",
+  "source": "Problem Solving Session 3",
+  "statement": "An $n \\times n$ matrix where each row is strictly increasing left-to-right and each column is strictly increasing top-to-bottom. Test whether a given integer $b$ is in the matrix. Design: $O(n^2)$, then $O(n \\log n)$ via binary search per row, then a D&C, then $O(n)$.",
+  "topics": ["binary-search", "divide-and-conquer"],
+  "pattern": "binary-search-variant",
+  "steps": [
+    {
+      "title": "$O(n^2)$ — brute force.",
+      "body": "Check each of the $n^2$ entries. Done.",
+      "tips": []
+    },
+    {
+      "title": "$O(n \\log n)$ — binary search per row.",
+      "body": "Each row is sorted: binary-search each row for $b$ in $O(\\log n)$. Total $O(n \\log n)$.",
+      "tips": []
+    },
+    {
+      "title": "$O(n \\log n)$ via D&C (split into 4 quadrants).",
+      "body": "Split the matrix into four $n/2 \\times n/2$ quadrants. Compare $b$ to the center element. Based on comparisons, some quadrants are ruled out (but not always — in general 3 of the 4 can remain).\n\nRecurrence: $T(n) = 3T(n/2) + O(1)$, giving $T(n) = \\Theta(n^{\\log_2 3}) \\approx \\Theta(n^{1.58})$. **Worse than $O(n \\log n)$.**",
+      "tips": [
+        { "label": "Why 3 quadrants, not 2", "content": "Comparing to the center rules out only one quadrant (the one whose maximum is $< b$ or whose minimum is $> b$). The other three must still be searched. Hence $3T(n/2)$." }
+      ]
+    },
+    {
+      "title": "$O(n)$ — walk from a corner.",
+      "body": "Start at the top-right corner $(1, n)$. At each step, compare the current cell to $b$:\n\n- If equal, return found.\n- If cell $> b$: $b$ can't be in this column (everything below is even larger). Move left.\n- If cell $< b$: $b$ can't be in this row (everything to the left is even smaller). Move down.\n\nStop when you fall off the matrix.\n\n**Why $O(n)$.** Each step moves either left or down by one. You can do at most $n$ left-moves and $n$ down-moves before falling off. So $O(n)$ steps total.\n\n**Correctness.** When you move left from $(i, j)$ because $M[i,j] > b$, every entry in column $j$ at row $\\ge i$ is $\\ge M[i,j] > b$. So those are eliminated. Similarly for down-moves.",
+      "tips": [
+        { "label": "Can we do better than $O(n)$?", "content": "No — there's a lower bound of $\\Omega(n)$ based on an adversary argument. In the worst case, you essentially must traverse a staircase of $n$ cells." }
+      ]
+    }
+  ],
+  "answerKey": "Best: $O(n)$ via staircase walk from top-right. Binary search per row gives $O(n \\log n)$; D&C into quadrants is $\\Theta(n^{\\log_2 3})$ — worse."
+}

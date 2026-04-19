@@ -1,0 +1,12 @@
+{
+  "id": "insertion-sort",
+  "title": "Insertion Sort",
+  "whenToUse": "Reference iterative sort. First example in class. Model for loop-invariant proof structure.",
+  "keyFormulas": [
+    "Worst-case runtime: $T(n) = \\Theta(n^2)$",
+    "Best-case runtime (already sorted): $\\Theta(n)$",
+    "Loop invariant: after iteration $j$ of the outer loop, $A[1..j]$ is sorted"
+  ],
+  "professor": "**Algorithm.**\n\n$$ \\texttt{InsertionSort}(A, n): \\text{ for } j \\text{ from } 1 \\text{ to } n: \\text{ for } i \\text{ from } j \\text{ down to } 2: \\text{ if } A[i] < A[i-1] \\text{ swap}.\\ \\text{Return } A. $$\n\n**Loop invariant.** After the $j$-th iteration of the outer loop, $A[1..j]$ is sorted in increasing order.\n\n**Correctness.**\n\n- Initialization ($j = 1$): $A[1..1]$ is trivially sorted.\n- Maintenance: assume $A[1..j]$ is sorted. In iteration $j+1$, the inner loop takes $A[j+1]$ and swaps it leftward until it is in the correct position relative to $A[1..j]$ — this is exactly 'insert $A[j+1]$ into its sorted place'. So after iteration $j+1$, $A[1..j+1]$ is sorted.\n- Termination: at $j = n$, $A[1..n]$ is sorted.\n\n**Worst-case runtime.** Outer loop runs $n$ times; inner loop runs at most $j - 1$ times per outer iteration; constant work per inner iteration. Total $\\sum_{j=1}^{n} (j-1) \\cdot c = c \\cdot n(n-1)/2 = \\Theta(n^2)$.\n\n**Best case.** If input is already sorted, inner loop does zero comparisons (no swap triggered). $\\Theta(n)$.\n\n**Why it's worth knowing.** The loop-invariant structure (Initialization / Maintenance / Termination) is the canonical template for proving correctness of iterative algorithms.",
+  "simplified": "**Algorithm:** walk left-to-right. At step $j$, slide $A[j]$ leftward via swaps until it reaches its correct place in $A[1..j]$.\n\n**Runtime:**\n\n- Worst case: $\\Theta(n^2)$ — array sorted in reverse.\n- Best case: $\\Theta(n)$ — already sorted.\n\n**Loop invariant:** 'After iteration $j$, $A[1..j]$ is sorted.' This is the first example of the loop-invariant proof pattern the professor uses throughout."
+}

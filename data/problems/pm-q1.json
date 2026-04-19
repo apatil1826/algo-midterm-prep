@@ -1,0 +1,58 @@
+{
+  "id": "pm-q1",
+  "title": "Practice Midterm Q1 — Asymptotic T/F (6 pts)",
+  "source": "Practice Midterm, Part A",
+  "statement": "For each claim, state true or false. No proofs or justifications needed. Functions $f, g$ are from $\\mathbb{N}$ to $\\mathbb{N}$.\n\n1. If $f(n) = \\Theta(n^3)$ and $g(n) = O(n^2)$, then $f(n)\\cdot g(n) = \\Theta(n^5)$.\n2. $\\sqrt{\\log_2 n} = \\Theta(\\log_2 \\sqrt{n})$.\n3. $T(n) = T(n/2) + n,\\ T(1) = 1 \\Rightarrow T(n) = \\Theta(n^2)$.\n4. $T(n) = T(n-1) + n,\\ T(1) = 1 \\Rightarrow T(n) = \\Theta(n^2)$.\n5. Merge Sort runs in $O(n \\log n)$ on average but not in the absolute worst case.\n6. $n$ distinct numbers split into groups of $9$; let $M$ be the median of the group medians. Then at most $13n/18$ of the original numbers could be greater than $M$.",
+  "topics": ["asymptotic-notation", "median-of-medians", "merge-sort"],
+  "pattern": "tf-asymptotic",
+  "steps": [
+    {
+      "title": "1. $f \\cdot g = \\Theta(n^5)$?",
+      "answer": "**False.** $f \\cdot g = O(n^5)$ holds, but $\\Theta$ requires a matching lower bound.",
+      "body": "We have $f = \\Theta(n^3)$ meaning $f(n)$ is both $O(n^3)$ and $\\Omega(n^3)$. But $g = O(n^2)$ only gives an *upper* bound on $g$; $g$ could be as small as a constant (e.g. $g(n) = 1$, which is indeed $O(n^2)$). Then $f \\cdot g$ would be $\\Theta(n^3)$, not $\\Theta(n^5)$. So no $\\Omega(n^5)$ bound is forced.",
+      "tips": []
+    },
+    {
+      "title": "2. $\\sqrt{\\log_2 n} = \\Theta(\\log_2 \\sqrt{n})$?",
+      "answer": "**False.** The RHS equals $\\tfrac{1}{2}\\log_2 n$, which is $\\Theta(\\log n)$ — way bigger than $\\sqrt{\\log n}$.",
+      "body": "By the log power rule, $\\log_2 \\sqrt{n} = \\log_2 n^{1/2} = \\tfrac{1}{2} \\log_2 n$. So the RHS is $\\Theta(\\log n)$. The LHS is $\\sqrt{\\log n} = (\\log n)^{1/2}$, which grows much slower. Since $\\log n$ beats $\\sqrt{\\log n}$ (the ratio $\\log n / \\sqrt{\\log n} = \\sqrt{\\log n} \\to \\infty$), we have $\\sqrt{\\log n} \\ne \\Omega(\\log n)$, so they're not $\\Theta$.",
+      "tips": [
+        { "label": "Log power rule", "content": "$\\log(x^k) = k \\log x$, so $\\log \\sqrt{n} = \\log n^{1/2} = \\tfrac{1}{2} \\log n$. This is the single step that breaks this whole claim." }
+      ]
+    },
+    {
+      "title": "3. $T(n) = T(n/2) + n = \\Theta(n^2)$?",
+      "answer": "**False.** $T(n) = \\Theta(n)$, not $\\Theta(n^2)$.",
+      "body": "Unroll the recurrence:\n\n$T(n) = n + T(n/2) = n + n/2 + T(n/4) = \\cdots = \\sum_{i=0}^{\\log_2 n - 1} \\frac{n}{2^i} + T(1)$.\n\nThe sum $\\sum_{i=0}^{\\infty} \\frac{1}{2^i} = 2$, so the whole sum is $\\le 2n$. Hence $T(n) = O(n)$. The first term $n$ gives $T(n) = \\Omega(n)$. So $T(n) = \\Theta(n)$.",
+      "tips": [
+        { "label": "Infinite geometric", "content": "$\\sum_{i=0}^{\\infty} r^i = \\dfrac{1}{1-r}$ for $0 \\le r < 1$. Here $r = 1/2$ so the sum is $2$. This is the standard way to upper-bound a decreasing geometric sum from a recursion tree." },
+        { "label": "Tree-view check", "content": "Level $i$: $1$ subproblem of size $n/2^i$, non-recursive work $n/2^i$. Level work is decreasing geometric → dominated by the root. $\\Theta(n)$." }
+      ]
+    },
+    {
+      "title": "4. $T(n) = T(n-1) + n = \\Theta(n^2)$?",
+      "answer": "**True.**",
+      "body": "Unroll: $T(n) = n + (n-1) + (n-2) + \\cdots + 2 + T(1) = T(1) + \\sum_{k=2}^{n} k$.\n\nThe sum $\\sum_{k=1}^{n} k = \\dfrac{n(n+1)}{2} = \\Theta(n^2)$. So $T(n) = \\Theta(n^2)$. This is the same recurrence as the worst-case Quick Sort.",
+      "tips": [
+        { "label": "Arithmetic series", "content": "$\\sum_{i=1}^{n} i = \\dfrac{n(n+1)}{2}$. Memorize this. Comes up in every Quick-Sort-worst-case argument." }
+      ]
+    },
+    {
+      "title": "5. Merge Sort: $O(n\\log n)$ average but not worst case?",
+      "answer": "**False.** Merge Sort is $\\Theta(n \\log n)$ in the **worst** case. No dependence on input distribution.",
+      "body": "Merge Sort's recurrence is $T(n) = 2T(n/2) + n$ regardless of input. It always does the same split and merge. The confusion here is with **Quick Sort** — whose worst case really is $\\Theta(n^2)$ while the average is $\\Theta(n \\log n)$.",
+      "tips": []
+    },
+    {
+      "title": "6. Groups of 9, median of medians $M$: at most $13n/18$ greater than $M$?",
+      "answer": "**True.**",
+      "body": "Generalize the median-of-medians guarantee. With groups of $k = 9$: there are $n/9$ groups. The median-of-medians $M$ is the median of these $n/9$ values, so at least $n/18$ group medians are $\\le M$.\n\nConsider any group whose median $m \\le M$. Sort the group: it looks like $(a_1, a_2, a_3, a_4, m, a_6, a_7, a_8, a_9)$. Here $a_1, a_2, a_3, a_4, m$ — **five** elements — are all $\\le m \\le M$.\n\nSo each such group guarantees 5 elements $\\le M$. Total: $\\frac{n}{18} \\cdot 5 = \\frac{5n}{18}$.\n\nHence at most $n - \\frac{5n}{18} = \\frac{13n}{18}$ elements can be strictly greater than $M$. ✓",
+      "tips": [
+        { "label": "General group-size formula", "content": "For groups of size $k$ (odd): $\\lceil k/2 \\rceil$ elements are $\\le m$ in each group where $m \\le M$. Half of the $n/k$ group medians are $\\le M$. So at least $(n/(2k)) \\cdot \\lceil k/2\\rceil$ elements are guaranteed $\\le M$." },
+        { "label": "Group of 5", "content": "$(n/10) \\cdot 3 = 3n/10$ elements $\\le M$, so at most $7n/10$ greater. This is the standard median-of-medians bound." },
+        { "label": "Group of 9", "content": "$(n/18) \\cdot 5 = 5n/18$ elements $\\le M$, so at most $13n/18$ greater. ✓" }
+      ]
+    }
+  ],
+  "answerKey": "1. False  2. False  3. False  4. True  5. False  6. True"
+}

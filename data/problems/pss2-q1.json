@@ -1,0 +1,23 @@
+{
+  "id": "pss2-q1",
+  "title": "PSS2 Q1 — $T(n) = 3T(n/4) + n$",
+  "source": "Problem Solving Session 2",
+  "statement": "Solve $T(n) = 3T(n/4) + n$ with $T(1) = 1$.",
+  "topics": ["recursion-trees", "induction-proofs"],
+  "pattern": "recursion-tree-solve",
+  "steps": [
+    {
+      "title": "Recursion tree.",
+      "body": "Level $i$: $3^i$ subproblems of size $n/4^i$. Non-recursive work per subproblem $= n/4^i$. Level work $= 3^i \\cdot n/4^i = n \\cdot (3/4)^i$.\n\nDecreasing geometric with ratio $3/4$.\n\n$$\\sum_{i=0}^{\\log_4 n - 1} n(3/4)^i \\le n \\sum_{i=0}^{\\infty} (3/4)^i = \\frac{n}{1 - 3/4} = 4n.$$\n\nLeaves: $3^{\\log_4 n} = n^{\\log_4 3} \\approx n^{0.79}$, cost $1$ each → $o(n)$ overall.\n\n**Total: $T(n) = \\Theta(n)$.**",
+      "tips": []
+    },
+    {
+      "title": "Inductive proof.",
+      "body": "**Claim:** $T(n) \\le Cn$ for $C = 16/13$ (or any $C \\ge 4$). Actually $C = 4$ is simplest.\n\n**Base $n=1$:** $T(1) = 1 \\le 4$. ✓\n\n**I.H.:** $T(k) \\le 4k$ for all $k < n$.\n\n**Step:** $T(n) = 3T(n/4) + n \\le 3 \\cdot 4 \\cdot (n/4) + n = 3n + n = 4n$. ✓\n\nSo $T(n) = O(n)$; combined with $T(n) \\ge n$: $T(n) = \\Theta(n)$.",
+      "tips": [
+        { "label": "Choosing $C$ via the recurrence rule", "content": "For $T(n) = aT(n/b) + n$ with $a/b < 1$: pick $C \\ge 1/(1 - a/b)$. Here $a/b = 3/4$, so $C \\ge 4$." }
+      ]
+    }
+  ],
+  "answerKey": "$T(n) = \\Theta(n)$. Inductive upper bound with $C = 4$: $T(n) \\le 3 \\cdot 4(n/4) + n = 4n$."
+}

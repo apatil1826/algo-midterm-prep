@@ -1,0 +1,30 @@
+{
+  "id": "hw2-ex1",
+  "title": "HW2 Extra 1 — $T(n) = T(9n/10) + T(n/10) + n$",
+  "source": "Homework 2 (Extra Practice)",
+  "statement": "Prove $T(n) = O(n \\log n)$ by induction, and draw a recursion tree. $T(1) = T(2) = 1$.",
+  "topics": ["unbalanced-recurrences", "recursion-trees"],
+  "pattern": "recursion-tree-solve",
+  "steps": [
+    {
+      "title": "(a) Inductive upper bound.",
+      "body": "**Claim:** $T(n) \\le Cn \\log_2 n$ for $n \\ge 2$.\n\n**Base $n = 2$:** $T(2) = 1 \\le C \\cdot 2 \\log_2 2 = 2C$. So $C \\ge 1/2$ suffices.\n\n**I.H.:** For all $2 \\le k < n$, $T(k) \\le Ck\\log_2 k$.\n\n**Step:**\n$$T(n) = T(9n/10) + T(n/10) + n \\le C\\cdot\\tfrac{9n}{10}\\log_2(9n/10) + C\\cdot\\tfrac{n}{10}\\log_2(n/10) + n.$$\n\nExpand using $\\log(ab) = \\log a + \\log b$:\n\n- $\\tfrac{9n}{10}\\log_2(9n/10) = \\tfrac{9n}{10}(\\log_2 n + \\log_2(9/10))$.\n- $\\tfrac{n}{10}\\log_2(n/10) = \\tfrac{n}{10}(\\log_2 n + \\log_2(1/10))$.\n\nAdd them: coefficient of $\\log_2 n$ is $\\tfrac{9n}{10} + \\tfrac{n}{10} = n$. So $Cn\\log_2 n$ appears. The leftover:\n$$Cn\\left(\\tfrac{9}{10}\\log_2\\tfrac{9}{10} + \\tfrac{1}{10}\\log_2\\tfrac{1}{10}\\right) = Cn \\cdot (-0.469\\ldots) \\approx -0.469 Cn.$$\n\nSo $T(n) \\le Cn\\log_2 n - 0.469 Cn + n$. For $C \\ge 1/0.469 \\approx 2.14$, the $-0.469 Cn + n \\le 0$, giving $T(n) \\le Cn\\log_2 n$. ✓",
+      "tips": [
+        { "label": "Entropy-like term", "content": "The $p \\log p + (1-p)\\log(1-p)$ term for $p = 9/10$ evaluates to about $-0.469$. This is the negative of a Shannon-entropy expression; whenever the branch fractions sum to 1, you always get a negative leftover, which is the slack that absorbs the $+n$." }
+      ]
+    },
+    {
+      "title": "(b) Recursion tree — level work is constant $n$.",
+      "body": "A key observation: at each full level, the subproblem sizes sum to $n$.\n\n- Level 0: one node of size $n$. Level work $= n$.\n- Level 1: sizes $9n/10, n/10$. Total size $= n$. Level work $= n$.\n- Level 2: sizes $(9/10)^2 n, (9/10)(1/10) n, (1/10)(9/10) n, (1/10)^2 n$. Sum $= n$. Level work $= n$.\n- More generally: a node of size $k$ contributes subproblem sizes $9k/10$ and $k/10$, summing to $k$. So level-total-size is preserved.\n\n**So each full level contributes $n$ non-recursive work.**",
+      "tips": []
+    },
+    {
+      "title": "(b) Tree height.",
+      "body": "Shortest branch: always follow the $1/10$ child → height $\\log_{10} n$.\n\nLongest branch: always follow the $9/10$ child → height $\\log_{10/9} n = O(\\log n)$.\n\nBoth are $O(\\log n)$, so the number of full levels is $O(\\log n)$. Total work: $O(n \\log n)$. Matches the inductive bound.",
+      "tips": [
+        { "label": "Branches of unequal length", "content": "Unlike balanced trees (Merge Sort), some branches end earlier. That's fine — the upper bound on total work is the number of levels in the deepest branch times the per-level work." }
+      ]
+    }
+  ],
+  "answerKey": "$T(n) = \\Theta(n \\log n)$. Each full level contributes exactly $n$ non-recursive work (subproblem sizes always sum to $n$), and there are $O(\\log n)$ levels."
+}

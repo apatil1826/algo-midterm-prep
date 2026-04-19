@@ -1,0 +1,514 @@
+[
+  {
+    "id": "topic:asymptotic-notation",
+    "type": "topic",
+    "title": "Asymptotic Notation (Big-O, Ω, Θ)",
+    "href": "/topics/asymptotic-notation",
+    "body": "Definitions and reasoning about eventual upper/lower bounds up to constants. Whenever a problem talks about runtime bounds, scaling with $n$, or asks you to compare growth rates. The first-line exam trigger is any true/false claim of the form $f(n) = O(g(n))$. Big-O means **eventually bounded above**. $f = O(g)$ says that for big enough $n$, $f(n)$ stays under some constant times $g(n)$. $\\Omega$ is the lower-bound version. $\\Theta$ is both. Ignore constants. Ignore low-order terms. The log base doesn't matter. To prove $f = O(g)$: pick one $(C, n_0)$ pair that works. Done. To disprove: show n",
+    "tags": [
+      "tier-1",
+      "lecture-1"
+    ]
+  },
+  {
+    "id": "topic:recursion-trees",
+    "type": "topic",
+    "title": "Solving Recurrences — Recursion Tree Method",
+    "href": "/topics/recursion-trees",
+    "body": "Visual method: sum the non-recursive work at each level plus the leaves. The exam explicitly says 'draw the recursion tree for this recurrence'. Default visual method for any divide-and-conquer runtime: $T(n) = aT(n/b) + f(n)$, or splits like $T(n) = T(an) + T(bn) + f(n)$. Draw the tree. Label each node with its problem size. At level $i$ there are $a^i$ nodes of size $n/b^i$ each, contributing $a^i \\cdot f(n/b^i)$ work. **The one question to ask:** *Is the work per level growing, shrinking, or staying constant as you go down?* - **Shrinking** geometrically → dominated by the top. $T(n) = \\The",
+    "tags": [
+      "tier-1",
+      "lecture-2"
+    ]
+  },
+  {
+    "id": "topic:induction-proofs",
+    "type": "topic",
+    "title": "Solving Recurrences — Substitution + Induction",
+    "href": "/topics/induction-proofs",
+    "body": "Guess the bound, then prove it via strong induction on a concrete inequality. Whenever the exam says 'provide a formal proof by induction' that $T(n) = O(f(n))$ or $\\Omega(f(n))$. Also the follow-up to any recursion-tree analysis when rigor is required. **Guess the bound, then induct.** Usually guess via recursion tree or substitution. **Structure every time:** 1. Claim: $\\exists\\, n_0, C$ such that $T(n) \\le C f(n)$ for all $n \\ge n_0$. 2. Base: check $T(n_0) \\le C f(n_0)$. Note what $C$ needs. 3. Strong I.H.: for all $k < n$, $T(k) \\le C f(k)$. 4. Plug I.H. into recurrence. Massage until you",
+    "tags": [
+      "tier-1",
+      "lecture-2"
+    ]
+  },
+  {
+    "id": "topic:divide-and-conquer",
+    "type": "topic",
+    "title": "Divide and Conquer — Design Paradigm",
+    "href": "/topics/divide-and-conquer",
+    "body": "Divide, recurse, combine. Runtime recurrence comes directly from the steps. Exam prompt 'design as efficient an algorithm as you can' with hints about splitting into halves, or when brute force is $O(n^2)$ and you need $O(n\\log n)$. Also when the problem has recursive self-similarity: the same type of problem on smaller inputs. **Three steps: divide, recurse, combine.** Plus a base case for tiny inputs. **Design mantra:** pretend the recursive calls just magically work. Your only job is (a) the base case and (b) combining two correct smaller answers into a correct bigger answer. **Runtime:** w",
+    "tags": [
+      "tier-1",
+      "lecture-2"
+    ]
+  },
+  {
+    "id": "topic:dynamic-programming",
+    "type": "topic",
+    "title": "Dynamic Programming — 5-Step Template",
+    "href": "/topics/dynamic-programming",
+    "body": "Define subproblem, write recurrence, prove optimal substructure, order, runtime. Exam trigger words: 'determine whether $X$ can be formed', 'maximum/minimum value of', 'count the number of ways', 'segment into valid pieces', 'longest/shortest subsequence'. Whenever the naive recursion has overlapping subproblems. **Use DP when** the naive recursion keeps solving the same smaller problems. **Follow these 5 steps for every DP problem — they are basically the grading rubric:** 1. **Subproblem** — in words. 'Let $B[i] = $ answer for the first $i$ characters.' That's it. 2. **Recurrence + base case",
+    "tags": [
+      "tier-1",
+      "lecture-4"
+    ]
+  },
+  {
+    "id": "topic:merge-sort",
+    "type": "topic",
+    "title": "Merge Sort",
+    "href": "/topics/merge-sort",
+    "body": "Classic D&C sort. Recurrence $T(n)=2T(n/2)+n$ gives $\\Theta(n\\log n)$. When you need $O(n\\log n)$ sorting with worst-case guarantees, or a reference example of a D&C recurrence $T(n)=2T(n/2)+n$. **Split in half → sort each half recursively → merge.** That's it. **Merge:** two pointers, one per sorted input, repeatedly pick the smaller front element. Linear time. **Recurrence:** $T(n) = 2T(n/2) + n = \\Theta(n \\log n)$. Worst case, no randomization needed. **Why $k$-way doesn't help:** splitting into $k$ pieces gives $T(n) = k T(n/k) + n$, still $\\Theta(n \\log n)$ for any constant $k$. Each leve",
+    "tags": [
+      "tier-2",
+      "lecture-2"
+    ]
+  },
+  {
+    "id": "topic:median-of-medians",
+    "type": "topic",
+    "title": "Median of Medians (Select)",
+    "href": "/topics/median-of-medians",
+    "body": "Deterministic $O(n)$ $i$-th order statistic via group-of-5 medians. Whenever you need to find the $i$-th smallest (including the median) in deterministic $O(n)$ worst-case time. Also a core exam topic: variant group sizes (9, 11, etc.) appear as true/false questions about dominance ratios. **Goal:** find the $i$-th smallest in deterministic $O(n)$. **Algorithm:** 1. Split into groups of 5. Find each group's median (brute force, constant time per group). 2. Recursively find the median of those group medians — call it $M$. 3. Partition the whole input around $M$. 4. Recurse on the side containin",
+    "tags": [
+      "tier-2",
+      "lecture-3"
+    ]
+  },
+  {
+    "id": "topic:unbalanced-recurrences",
+    "type": "topic",
+    "title": "Unbalanced-Split Recurrences",
+    "href": "/topics/unbalanced-recurrences",
+    "body": "$T(n)=T(an)+T(bn)+n$: rule based on whether $a+b<1$, $=1$, or $>1$. Whenever your recurrence has two recursive calls on different fractions of $n$: $T(n) = T(an) + T(bn) + f(n)$ with $a, b$ constants in $(0, 1)$. Appears in Median of Medians, in variant mergesorts, and as exam recurrences like $T(n) = T(n/2) + T(n/3) + n$. **Recurrence shape:** $T(n) = T(an) + T(bn) + n$ with $a, b < 1$. **One rule to memorize:** look at $a + b$. - $a + b < 1$ → $\\Theta(n)$. (Dominated by the root.) - $a + b = 1$ → $\\Theta(n \\log n)$. (Constant $n$ work per level.) - $a + b > 1$ → bigger than $n \\log n$. **Why",
+    "tags": [
+      "tier-2",
+      "lecture-3"
+    ]
+  },
+  {
+    "id": "topic:loop-invariants",
+    "type": "topic",
+    "title": "Loop Invariants & Inductive Correctness",
+    "href": "/topics/loop-invariants",
+    "body": "Standard pattern: state invariant, prove base + maintenance + termination. For proving correctness of iterative algorithms (Insertion Sort, Merge, Partition, bottom-up DP). Also implicitly used whenever you prove a loop's post-condition. **Loop invariant = a property that stays true through every iteration.** Structure every proof in three parts: 1. **Initialization:** true before the loop starts (or after 0 iterations). 2. **Maintenance:** if true after iteration $i$, it's still true after iteration $i+1$. 3. **Termination:** when the loop ends, the invariant + exit condition imply what you w",
+    "tags": [
+      "tier-2",
+      "lecture-1"
+    ]
+  },
+  {
+    "id": "topic:closest-pair",
+    "type": "topic",
+    "title": "Closest Pair of Points in the Plane",
+    "href": "/topics/closest-pair",
+    "body": "$O(n\\log n)$ D&C algorithm using the strip-and-15-neighbors trick. Asked directly, or as a model for D&C with a 'clever linear-time combine'. Also a good analogue for 2D maxima / Pareto frontier design problems. **Goal:** closest pair of $n$ points in 2D in $O(n \\log n)$. **Preprocess once:** sort by $x$ (get $S_x$), sort by $y$ (get $S_y$). $O(n \\log n)$. **Recursive step:** 1. Split by median $x$. 2. Recurse on each half, get $d_L, d_R$. Let $d = \\min$. 3. Points within $\\pm d$ of the median $x$ form 'the strip'. Their closest pair might beat $d$. 4. Walk through the strip sorted by $y$. For",
+    "tags": [
+      "tier-3",
+      "lecture-3"
+    ]
+  },
+  {
+    "id": "topic:karatsuba",
+    "type": "topic",
+    "title": "Karatsuba's Integer Multiplication",
+    "href": "/topics/karatsuba",
+    "body": "Three recursive multiplications instead of four: $T(n)=3T(n/2)+n = \\Theta(n^{\\log_2 3})$. To beat $n^2$ for multiplication. Also a textbook example of saving a recursive call via algebraic identity → changing the exponent in the recurrence. **Idea:** to multiply two $n$-digit numbers, split each in half. Schoolbook D&C needs 4 subproducts ($\\Theta(n^2)$). Karatsuba gets by with 3. **The trick:** instead of computing $x_1 y_0 + x_0 y_1$ as two products, compute $(x_1+x_0)(y_1+y_0)$ as one product. Then $$ x_1 y_0 + x_0 y_1 = (x_1+x_0)(y_1+y_0) - x_1 y_1 - x_0 y_0, $$ which uses only quantities ",
+    "tags": [
+      "tier-3",
+      "lecture-3"
+    ]
+  },
+  {
+    "id": "topic:quick-sort",
+    "type": "topic",
+    "title": "Quick Sort",
+    "href": "/topics/quick-sort",
+    "body": "Pivot + partition. Worst $\\Theta(n^2)$, best/expected $\\Theta(n\\log n)$. As contrast to Merge Sort. Key exam points: recognize that pivot choice determines runtime, and that $T(n) = T(n-1) + n$ is the worst-case recurrence. **Algorithm:** pick a pivot, partition around it, recurse on both sides. **Runtime depends entirely on the pivot:** - Pivot lands in the middle → $T(n) = 2T(n/2) + n = \\Theta(n \\log n)$. - Pivot is always max/min → $T(n) = T(n-1) + n = \\Theta(n^2)$. - Random pivot → expected $\\Theta(n \\log n)$. **Worst-case expansion (memorize):** $T(n) = T(n-1) + n$ gives $1 + 2 + 3 + \\cdo",
+    "tags": [
+      "tier-3",
+      "lecture-2"
+    ]
+  },
+  {
+    "id": "topic:binary-search",
+    "type": "topic",
+    "title": "Binary Search & Variants",
+    "href": "/topics/binary-search",
+    "body": "Halve-the-problem template. $T(n)=T(n/2)+1 \\Rightarrow \\Theta(\\log n)$. Sorted input + searching → $O(\\log n)$. Also: 'find an index where $A[i] = i$', 'merge two sorted arrays' variants, output-sensitive unbounded search. **Classic form:** sorted array, check the middle, recurse on the half that might contain the target. $\\Theta(\\log n)$. **Template for any 'halve-the-problem' design:** 1. Look at the middle. 2. Decide which half can still contain the answer. 3. Recurse on that half. **Common twists:** - **Find $A[i] = i$:** same template, uses that distinct sorted integers grow by at least 1",
+    "tags": [
+      "tier-3",
+      "lecture-1"
+    ]
+  },
+  {
+    "id": "topic:lcs",
+    "type": "topic",
+    "title": "Longest Common Subsequence",
+    "href": "/topics/lcs",
+    "body": "2D DP on prefixes. Canonical example of exchange-argument correctness. Canonical 2D DP. When you see two sequences and want to measure similarity via a matching that preserves order (not contiguous). **Problem:** longest sequence that appears in both $X$ and $Y$ as a subsequence (not necessarily contiguous). **Subproblem:** $DP[i, j] = $ LCS length of the first $i$ chars of $X$ and first $j$ chars of $Y$. **Recurrence:** - Base: $DP[0, *] = DP[*, 0] = 0$. - If $x_i = y_j$: $DP[i, j] = 1 + DP[i-1, j-1]$. - Else: $DP[i, j] = \\max(DP[i-1, j], DP[i, j-1])$. **Fill order:** row by row, left to righ",
+    "tags": [
+      "tier-3",
+      "lecture-4"
+    ]
+  },
+  {
+    "id": "topic:rod-cutting",
+    "type": "topic",
+    "title": "Rod Cutting",
+    "href": "/topics/rod-cutting",
+    "body": "1D DP on prefix length. Classic optimal-substructure example. Canonical 1D DP on prefix length. Classroom template for 'maximize a value by choosing where to cut'. Pattern transfers to: segmentation problems, word break, coin change. **Problem:** rod length $n$, prices for each length. Maximize revenue. **DP:** - $B[i] = $ max money from a length-$i$ rod. - $B[0] = 0$. - $B[n] = \\max_{i} (P[i] + B[n-i])$ — try every possible leftmost cut. **Why correct:** the leftmost cut must be some specific $i$, and the leftover piece must itself be cut optimally (exchange argument). **Runtime:** $n$ subpro",
+    "tags": [
+      "tier-3",
+      "lecture-4"
+    ]
+  },
+  {
+    "id": "topic:insertion-sort",
+    "type": "topic",
+    "title": "Insertion Sort",
+    "href": "/topics/insertion-sort",
+    "body": "Reference iterative sort. $\\Theta(n^2)$ worst case; canonical loop-invariant proof. Reference iterative sort. First example in class. Model for loop-invariant proof structure. **Algorithm:** walk left-to-right. At step $j$, slide $A[j]$ leftward via swaps until it reaches its correct place in $A[1..j]$. **Runtime:** - Worst case: $\\Theta(n^2)$ — array sorted in reverse. - Best case: $\\Theta(n)$ — already sorted. **Loop invariant:** 'After iteration $j$, $A[1..j]$ is sorted.' This is the first example of the loop-invariant proof pattern the professor uses throughout. Worst-case runtime: $T(n) =",
+    "tags": [
+      "tier-4",
+      "lecture-1"
+    ]
+  },
+  {
+    "id": "topic:master-theorem",
+    "type": "topic",
+    "title": "Master Theorem (Reference)",
+    "href": "/topics/master-theorem",
+    "body": "Closed-form for $T(n)=aT(n/b)+f(n)$. Optional; we solve via trees/induction instead. Only as a cross-check. The professor explicitly says this is OPTIONAL and the course uses recursion trees + induction. Many recurrences on the exam don't even fit the master-theorem form. **One-line version:** for $T(n) = aT(n/b) + f(n)$, compute $\\alpha = \\log_b a$. Compare $f(n)$ with $n^\\alpha$. - $f \\ll n^\\alpha$ (polynomially smaller) → $\\Theta(n^\\alpha)$. - $f \\approx n^\\alpha$ → $\\Theta(n^\\alpha \\log n)$. - $f \\gg n^\\alpha$ (polynomially larger) → $\\Theta(f(n))$. **The three recurrences you need:** - Me",
+    "tags": [
+      "tier-4",
+      "lecture-0"
+    ]
+  },
+  {
+    "id": "topic:log-exp-math",
+    "type": "topic",
+    "title": "Log & Exponent Rules (Refresher)",
+    "href": "/topics/log-exp-math",
+    "body": "Change of base, product/quotient/power rules, common summations. When math manipulations hit a wall. Change of base, product/quotient/power rules, common finite and infinite summations. **Logs — memorize these four:** - Change of base: $\\log_a b = \\dfrac{\\log_c b}{\\log_c a}$. - $\\log(xy) = \\log x + \\log y$. - $\\log(x/y) = \\log x - \\log y$. - $\\log(x^k) = k \\log x$. **Inside Big-O, log base is irrelevant.** Just write $O(\\log n)$. **Summation reflex table for recursion trees:** - Decreasing geometric → $\\le \\dfrac{1}{1-r}$ (a constant). Dominated by first term. - Increasing geometric → dominate",
+    "tags": [
+      "tier-4",
+      "lecture-0"
+    ]
+  },
+  {
+    "id": "problem:pm-q1",
+    "type": "problem",
+    "title": "Practice Midterm Q1 — Asymptotic T/F",
+    "href": "/problems/pm-q1",
+    "body": "Six T/F claims testing definitions, recurrence shapes, and median-of-medians dominance. For each claim, state true or false. No proofs or justifications needed. Functions $f, g$ are from $\\mathbb{N}$ to $\\mathbb{N}$. 1. If $f(n) = \\Theta(n^3)$ and $g(n) = O(n^2)$, then $f(n)\\cdot g(n) = \\Theta(n^5)$. 2. $\\sqrt{\\log_2 n} = \\Theta(\\log_2 \\sqrt{n})$. 3. $T(n) = T(n/2) + n,\\ T(1) = 1 \\Rightarrow T(n) = \\Theta(n^2)$. 4. $T(n) = T(n-1) + n,\\ T(1) = 1 \\Rightarrow T(n) = \\Theta(n^2)$. 5. Merge Sort runs in $O(n \\log n)$ on average but not in the absolute worst case. 6. $n$ distinct numbers split into ",
+    "tags": [
+      "Practice Midterm",
+      "tf-asymptotic",
+      "asymptotic-notation",
+      "median-of-medians",
+      "merge-sort",
+      "difficulty-easy"
+    ]
+  },
+  {
+    "id": "problem:pm-q2",
+    "type": "problem",
+    "title": "Practice Midterm Q2 — Recursion Tree for $T(n) = 3T(n/5) + n$",
+    "href": "/problems/pm-q2",
+    "body": "Draw the recursion tree, compute per-level work, sum the series, state $\\Theta$. Consider $T(n) = 3T(n/5) + n$, with $T(1) = 1$. Draw the recursion tree and use it to calculate $T(n)$ up to big-$\\Theta$. Include: - For a general level $i$: number of subproblems at that level, size of each subproblem. - Total non-recursive work done at level $i$. - Height of the tree, number of leaves, total work at the leaves. - Your summing / upper bounding of the series. - Conclude $T(n) = \\Theta(?)$. $T(n) = \\Theta(n)$.",
+    "tags": [
+      "Practice Midterm",
+      "recursion-tree-solve",
+      "recursion-trees",
+      "induction-proofs",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "problem:pm-q3",
+    "type": "problem",
+    "title": "Practice Midterm Q3 — Induction for $T(n) = T(n/2) + T(n/3) + n = O(n)$",
+    "href": "/problems/pm-q3",
+    "body": "Formal inductive proof of an $O(n)$ bound on an unbalanced recurrence. Consider $T(n) = T(n/2) + T(n/3) + n$ with $T(1) = 1$. Provide a formal proof by induction that $T(n) = O(n)$. By strong induction with claim $T(n) \\le 6n$: base case $T(1)=1 \\le 6$; step $T(n) \\le 6n/2 + 6n/3 + n = 3n + 2n + n = 6n$. Hence $T(n) = O(n)$.",
+    "tags": [
+      "Practice Midterm",
+      "induct-recurrence",
+      "induction-proofs",
+      "unbalanced-recurrences",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "problem:pm-q4",
+    "type": "problem",
+    "title": "Practice Midterm Q4 — Pareto-Undominated Points (D&C)",
+    "href": "/problems/pm-q4",
+    "body": "Design an $O(n \\log n)$ algorithm for the undominated / Pareto-frontier problem. A set $S$ of $n$ points $(x_i, y_i)$ in the plane, with all $x_i$ distinct and all $y_i$ distinct. Point $i$ **dominates** $j$ if $x_i > x_j$ AND $y_i > y_j$. A point is **undominated** if no other point dominates it. (a) List undominated points in a given diagram. (b) Draw a 5-point set where all 5 are undominated; another where only 1 is undominated. (c) Design the most efficient algorithm you can. Hint: divide and conquer, or a simple sorting approach. (d) Asymptotic worst-case runtime; state recurrence if D&C.",
+    "tags": [
+      "Practice Midterm",
+      "dc-design",
+      "divide-and-conquer",
+      "merge-sort",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "problem:pm-q5",
+    "type": "problem",
+    "title": "Practice Midterm Q5 — Word Break DP",
+    "href": "/problems/pm-q5",
+    "body": "State recurrence and base case for word-break segmentation; $O(n^2)$. Given an input string $s[1..n]$ and a set of valid words $D$ (membership in $D$ takes constant time), design an algorithm to determine whether $s$ can be segmented into a space-separated sequence of valid words. Example: $D = \\{\\text{am, are, i, important, is, you, ant}\\}$, input $\\text{iamimportant}$ segments as '$i$ $am$ $important$' → True. With subproblem $B[i] = $ True iff $s[1..i]$ can be segmented into valid words: 1. State a recurrence (and base cases) so all subproblems can be solved in total $O(n^2)$. 2. For $D = \\",
+    "tags": [
+      "Practice Midterm",
+      "dp-design",
+      "dynamic-programming",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "problem:pm-q6",
+    "type": "problem",
+    "title": "Practice Midterm Q6 — Ten Envelopes (Extra Credit)",
+    "href": "/problems/pm-q6",
+    "body": "Binary-representation puzzle: distribute \\$1000 into 10 envelopes covering every amount \\$1–\\$1000. You have one thousand \\$1 bills. Can you distribute them among 10 envelopes so that any amount from \\$1 to \\$1000 can be made by combining some subset of envelopes exactly? You commit to the distribution first, then the amount is revealed. Distribute as $\\{1, 2, 4, 8, 16, 32, 64, 128, 256, 489\\}$. First 9 are powers of 2 (cover $[1, 511]$ via binary); the 489-envelope extends coverage to $[489, 1000]$ (binary of $n-489 \\in [0, 511]$). Intervals overlap at $[489, 511]$, so $[1, 1000]$ is fully co",
+    "tags": [
+      "Practice Midterm",
+      "puzzle",
+      "divide-and-conquer",
+      "difficulty-hard"
+    ]
+  },
+  {
+    "id": "problem:hw1-q5",
+    "type": "problem",
+    "title": "HW1 Q5 — Solve $T(n) = 2T(n/2) + 1$",
+    "href": "/problems/hw1-q5",
+    "body": "Substitute repeatedly, sum decreasing geometric, conclude $\\Theta(n)$. Consider $T(n) = 2T(n/2) + 1$ with $T(1) = 1$. By repeatedly substituting, calculate $T(n)$ up to big-$\\Theta$. $T(n) = \\Theta(n)$. Exact: $T(n) = 2n - 1$.",
+    "tags": [
+      "Homework 1",
+      "recursion-tree-solve",
+      "recursion-trees",
+      "induction-proofs",
+      "difficulty-easy"
+    ]
+  },
+  {
+    "id": "problem:hw1-q6",
+    "type": "problem",
+    "title": "HW1 Q6 — Guess $T(n) = n^p + c$ for $T(n) = T(n/3) + T(2n/3) + 1$",
+    "href": "/problems/hw1-q6",
+    "body": "Try $p = 1/2$, $p = 1$, $p = 2$; identify $T(n) = n - 1$ as exact solution. $T(1) = 0$, $T(2) = 1$, and for $n > 2$: $T(n) = T(n/3) + T(2n/3) + 1$. Try $T(n) = \\sqrt{n}$, $n$, $n^2$; which one almost satisfies the recurrence? Then set $T(n) = n^p + c$, pick $p$ and solve for $c$. $T(n) = n - 1$ satisfies the recurrence exactly. So $T(n) = \\Theta(n)$.",
+    "tags": [
+      "Homework 1",
+      "induct-recurrence",
+      "induction-proofs",
+      "unbalanced-recurrences",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "problem:hw2-q2",
+    "type": "problem",
+    "title": "HW2 Q2 — $T(n) = 2T(n/3) + n$",
+    "href": "/problems/hw2-q2",
+    "body": "$\\Theta(n)$: decreasing geometric with ratio $2/3$; leaves $n^{\\log_3 2}$ are $o(n)$. For the recurrence $T(n) = 2T(n/3) + n$ with $T(1) = 1$: (a) draw the recursion tree and find an asymptotically tight bound. (b) prove the $\\Theta$-bound by induction. $T(n) = \\Theta(n)$. Upper bound by induction with $C = 3$.",
+    "tags": [
+      "Homework 2",
+      "recursion-tree-solve",
+      "recursion-trees",
+      "induction-proofs",
+      "difficulty-easy"
+    ]
+  },
+  {
+    "id": "problem:hw2-q3",
+    "type": "problem",
+    "title": "HW2 Q3 — 3-Way Merge Sort",
+    "href": "/problems/hw2-q3",
+    "body": "Split into 3 pieces, 3-way merge, $T(n) = 3T(n/3) + n = \\Theta(n \\log n)$. 3-Merge Sort splits the input list into 3 equal parts, recursively sorts each, then merges the three. (a) merge three sorted arrays of size $n/3$ in $O(n)$; (b) write the runtime recurrence; (c) solve it; (d) [optional] formally prove the $\\Theta$-bound. $T(n) = 3T(n/3) + O(n) = \\Theta(n \\log n)$. Same asymptotic as 2-way Merge Sort.",
+    "tags": [
+      "Homework 2",
+      "dc-design",
+      "merge-sort",
+      "divide-and-conquer",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "problem:hw2-q4",
+    "type": "problem",
+    "title": "HW2 Q4 — Find $i$ with $A[i] = i$ in $O(\\log n)$",
+    "href": "/problems/hw2-q4",
+    "body": "Binary search with offset bookkeeping; uses distinct-sorted-integer monotonicity. Given a sorted array $A$ of $n$ distinct integers, find an index $i$ (if it exists) with $A[i] = i$, in $O(\\log n)$. Binary-search using monotonicity of $f(i) = A[i] - i$. Recurrence $T(n) = T(n/2) + O(1) = \\Theta(\\log n)$.",
+    "tags": [
+      "Homework 2",
+      "binary-search-variant",
+      "binary-search",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "problem:hw2-q5",
+    "type": "problem",
+    "title": "HW2 Q5 — Sort a 'Close-to-Sorted' Array in $O(n)$",
+    "href": "/problems/hw2-q5",
+    "body": "Stack-based scan separates out-of-place elements; sort the small residual + merge. $A$ of size $n$ differs from its sorted version in at most $\\log_2 n$ positions. Sort $A$ in $O(n)$. Scan and maintain monotone stack $S$ (contains most of $A$, sorted). Spill-over list $T$ has $\\le 2\\log_2 n$ elements. Sort $T$ (cheap) and merge. Total $O(n)$.",
+    "tags": [
+      "Homework 2",
+      "dc-design",
+      "merge-sort",
+      "divide-and-conquer",
+      "difficulty-hard"
+    ]
+  },
+  {
+    "id": "problem:hw2-q6",
+    "type": "problem",
+    "title": "HW2 Q6 — Strengthen I.H. for $T(n) = 4T(n/2) + n$",
+    "href": "/problems/hw2-q6",
+    "body": "Plain $T(k) \\le Ck^2$ fails; strengthen to $T(k) \\le Ck^2 - k$. $T(n) = 4T(n/2) + n$ with $T(1) = 1$. Prove by induction that $T(n) = O(n^2)$. Hint: plain I.H. $T(k) \\le Ck^2$ fails; strengthen. Strengthen I.H. to $T(k) \\le Ck^2 - k$ (for $C \\ge 2$). Inductive step: $T(n) = 4T(n/2) + n \\le 4(C(n/2)^2 - n/2) + n = Cn^2 - n$. Hence $T(n) = O(n^2)$.",
+    "tags": [
+      "Homework 2",
+      "induct-recurrence",
+      "induction-proofs",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "problem:hw2-ex1",
+    "type": "problem",
+    "title": "HW2 Extra 1 — $T(n) = T(9n/10) + T(n/10) + n$",
+    "href": "/problems/hw2-ex1",
+    "body": "$a + b = 1$ case: constant $n$ work per full level, $\\Theta(n \\log n)$. Prove $T(n) = O(n \\log n)$ by induction, and draw a recursion tree. $T(1) = T(2) = 1$. $T(n) = \\Theta(n \\log n)$. Each full level contributes exactly $n$ non-recursive work (subproblem sizes always sum to $n$), and there are $O(\\log n)$ levels.",
+    "tags": [
+      "Homework 2 (Extra)",
+      "recursion-tree-solve",
+      "unbalanced-recurrences",
+      "recursion-trees",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "problem:pss2-q1",
+    "type": "problem",
+    "title": "PSS2 Q1 — $T(n) = 3T(n/4) + n$",
+    "href": "/problems/pss2-q1",
+    "body": "Decreasing geometric: $\\Theta(n)$. Solve $T(n) = 3T(n/4) + n$ with $T(1) = 1$. $T(n) = \\Theta(n)$. Inductive upper bound with $C = 4$: $T(n) \\le 3 \\cdot 4(n/4) + n = 4n$.",
+    "tags": [
+      "Problem Solving Session 2",
+      "recursion-tree-solve",
+      "recursion-trees",
+      "induction-proofs",
+      "difficulty-easy"
+    ]
+  },
+  {
+    "id": "problem:pss3-q2",
+    "type": "problem",
+    "title": "PSS3 Q2 — Search in a Row/Col-Sorted Matrix",
+    "href": "/problems/pss3-q2",
+    "body": "Walk from top-right corner — each step eliminates a row or column. $O(n)$. An $n \\times n$ matrix where each row is strictly increasing left-to-right and each column is strictly increasing top-to-bottom. Test whether a given integer $b$ is in the matrix. Design: $O(n^2)$, then $O(n \\log n)$ via binary search per row, then a D&C, then $O(n)$. Best: $O(n)$ via staircase walk from top-right. Binary search per row gives $O(n \\log n)$; D&C into quadrants is $\\Theta(n^{\\log_2 3})$ — worse.",
+    "tags": [
+      "Problem Solving Session 3",
+      "binary-search-variant",
+      "binary-search",
+      "divide-and-conquer",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "problem:pss3-q4",
+    "type": "problem",
+    "title": "PSS3 Q4 — Majority Element (Equality Test Only)",
+    "href": "/problems/pss3-q4",
+    "body": "D&C: majority of union is majority of one half (or missing). $n$ objects (even $n$). You may test whether two objects are equal in $O(1)$ — no other operation. Find a **strict majority** element (more than $n/2$ occurrences), or report none. First $O(n \\log n)$ via D&C, then $O(n)$. $O(n \\log n)$ D&C: majority of whole = majority of some half. Find candidates in halves, verify globally. $O(n)$: Boyer–Moore vote + verify.",
+    "tags": [
+      "Problem Solving Session 3",
+      "dc-design",
+      "divide-and-conquer",
+      "difficulty-medium"
+    ]
+  },
+  {
+    "id": "pattern:tf-asymptotic",
+    "type": "pattern",
+    "title": "True/False Asymptotic Claims",
+    "href": "/patterns/tf-asymptotic",
+    "body": "Compare growth rates using the formal definitions. Know the standard traps. Go back to definition. Ask: can I find $(C, n_0)$? If not, is there a witness $n$ that breaks every attempt at $C$? 'State true or false. No justification needed.' A claim involving $f(n), g(n)$ and $O, \\Omega, \\Theta$ A claim about Merge Sort / Quick Sort runtime behavior A claim about median-of-medians dominance ratio (e.g. '$13n/18$ can be greater than $M$') Know the hierarchy: constants $\\prec$ logs $\\prec$ polynomials $\\prec$ exponentials. Know log rules: $\\log(xy) = \\log x + \\log y$, $\\log(x^k) = k\\log x$, base c",
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "pattern:recursion-tree-solve",
+    "type": "pattern",
+    "title": "Recursion Tree for $T(n) = aT(n/b) + f(n)$",
+    "href": "/patterns/recursion-tree-solve",
+    "body": "Draw the tree, count per-level work, sum. At level $i$: $a^i$ nodes of size $n/b^i$, level work $a^i f(n/b^i)$. Height $\\log_b n$. Leaves $n^{\\log_b a}$. Identify regime (decreasing / constant / increasing geometric), sum accordingly. 'Draw the recursion tree for this recurrence.' 'Calculate T(n) up to big-$\\Theta$.' Any recurrence of the form $T(n) = aT(n/b) + f(n)$ you haven't seen before Count per-level: $a^i$ nodes, each of size $n/b^i$, each doing $f(n/b^i)$ non-recursive work. Level work = $a^i \\cdot f(n/b^i)$. Determine if the level-work is decreasing, constant, or increasing in $i$. De",
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "pattern:induct-recurrence",
+    "type": "pattern",
+    "title": "Formal Induction for $T(n) = O(f(n))$",
+    "href": "/patterns/induct-recurrence",
+    "body": "Prove a concrete inequality by strong induction. Must derive EXACT bound. Strong induction: claim $T(n) \\le Cf(n)$ for specific $C$. Base, I.H., plug into recurrence, arrive at EXACT $T(n) \\le Cf(n)$. If stuck, strengthen I.H. with a subtracted lower-order term. 'Provide a formal proof by induction.' 'Prove that $T(n) = O(f(n))$.' After you've guessed a bound via recursion tree or substitution **Claim:** $\\exists\\, n_0, C$ s.t. $T(n) \\le Cf(n)$ for all $n \\ge n_0$. **Base case:** check $T(n_0)$; note what $C$ needs. **I.H.:** for all $n_0 \\le k < n$, $T(k) \\le Cf(k)$. (STRONG induction, CONCRE",
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "pattern:dc-design",
+    "type": "pattern",
+    "title": "Design a Divide-and-Conquer Algorithm",
+    "href": "/patterns/dc-design",
+    "body": "Split, recurse, combine cleverly. Usually aiming for $\\Theta(n\\log n)$ when brute force is $\\Theta(n^2)$. Decide: (1) how to split (usually halve by some coordinate / attribute), (2) what each recursive call returns, (3) how to combine in linear (or $O(n\\log n)$) time. Write the recurrence. Solve. 'Design as efficient an algorithm as you can.' Brute force is $O(n^2)$ and there's structure you can exploit. 'If you used divide and conquer, state a recurrence.' Hint phrases like 'this can be done explicitly by D&C, or more simply by sorting'. **Base case** for small sizes. **Divide:** usually by ",
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "pattern:dp-design",
+    "type": "pattern",
+    "title": "Design a Dynamic Programming Algorithm",
+    "href": "/patterns/dp-design",
+    "body": "Define subproblem, write recurrence, prove optimal substructure, fill order, runtime. Follow the 5-step template (matches the exam grading rubric). 'Determine whether this string can be segmented.' 'Maximum value obtainable.' 'Count the number of ways.' 'Longest/shortest sub[sequence|string].' Naive recursion has overlapping subproblems. **Step 1: Subproblem.** Define $B[i]$ (or $DP[i,j]$) in WORDS. E.g. $B[i]$ = True iff $s[1..i]$ can be segmented. **Step 2: Recurrence + base cases.** Express $B[i]$ in terms of strictly smaller subproblems. Include $B[0]$ or $B[0,*]$ bases. **Step 3: Correctn",
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "pattern:binary-search-variant",
+    "type": "pattern",
+    "title": "Binary-Search Variant on Sorted Input",
+    "href": "/patterns/binary-search-variant",
+    "body": "Halve the search space. Might need extra bookkeeping (offset, monotone function construction). Compare middle; eliminate half of the remaining range. Recurrence $T(n) = T(n/2) + O(1) = \\Theta(\\log n)$. Sorted array, need $O(\\log n)$ or $O(\\log m + \\log n)$. 'Find an index where $X$ holds.' Search in an unbounded / infinite space. Median of two sorted arrays. Row/column-sorted matrix (related — use staircase walk). Identify a **monotone** quantity in the input (sorted values, $A[i] - i$, etc.). Pick the middle index. Decide which half the answer must lie in (use the monotonicity). Recurse on th",
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "pattern:median-of-medians-variant",
+    "type": "pattern",
+    "title": "Median of Medians with Non-Standard Group Size",
+    "href": "/patterns/median-of-medians-variant",
+    "body": "Apply the pigeonhole formula: $(n/(2k)) \\cdot \\lceil k/2\\rceil$ elements guaranteed on one side. Count: $n/k$ groups, half of them ($n/(2k)$) have group medians $\\le M$. Each such group contributes $\\lceil k/2\\rceil$ elements $\\le M$. Product: $(n/(2k))\\cdot\\lceil k/2\\rceil$ guaranteed $\\le M$. 'Split $n$ numbers into groups of $k$…' 'Let $M$ be the median of the group medians.' 'At most [fraction] of the original numbers could be greater than $M$.' Number of groups: $n/k$. Group medians $\\le M$: at least $n/(2k)$ (since $M$ is the median of group medians). Each such group has $\\lceil k/2\\rcei",
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "pattern:exchange-argument",
+    "type": "pattern",
+    "title": "Exchange Argument for Optimal Substructure",
+    "href": "/patterns/exchange-argument",
+    "body": "Assume OPT doesn't have the claimed structure; swap to build a strictly better solution; contradict optimality. Consider an optimal solution OPT. Assume for contradiction it doesn't have the claimed structure (e.g. doesn't end in the right way). Surgically swap the offending piece for a better alternative. The modified ALT is still feasible and strictly better. Contradiction. Proving correctness of a DP recurrence. Showing 'any optimal solution must look like [something simpler]'. Arguing optimal substructure in greedy problems. Let OPT be an optimal solution. Suppose OPT doesn't have the clai",
+    "tags": [
+      "pattern"
+    ]
+  }
+]

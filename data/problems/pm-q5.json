@@ -1,0 +1,33 @@
+{
+  "id": "pm-q5",
+  "title": "Practice Midterm Q5 — Word Break DP (10 pts)",
+  "source": "Practice Midterm, Part B",
+  "statement": "Given an input string $s[1..n]$ and a set of valid words $D$ (membership in $D$ takes constant time), design an algorithm to determine whether $s$ can be segmented into a space-separated sequence of valid words.\n\nExample: $D = \\{\\text{am, are, i, important, is, you, ant}\\}$, input $\\text{iamimportant}$ segments as '$i$ $am$ $important$' → True.\n\nWith subproblem $B[i] = $ True iff $s[1..i]$ can be segmented into valid words:\n\n1. State a recurrence (and base cases) so all subproblems can be solved in total $O(n^2)$.\n2. For $D = \\{a, am, at, cat, ran\\}$ and $s = \\text{catamaran}$, fill out the $B[i]$ table for $i = 1, \\ldots, 9$.\n3. State the number of subproblems and time per subproblem; justify the $O(n^2)$ runtime.",
+  "topics": ["dynamic-programming"],
+  "pattern": "dp-design",
+  "steps": [
+    {
+      "title": "Part 1 — Recurrence.",
+      "body": "**Base case:** $B[0] = \\text{True}$. (The empty string segments trivially.)\n\n**General case:** for $i \\ge 1$,\n$$B[i] = \\bigvee_{j = 1}^{i} \\Big(B[i - j] \\;\\wedge\\; s[i-j+1 \\ldots i] \\in D\\Big).$$\n\nIn words: $B[i]$ is True iff there exists some last-word length $j \\in \\{1, \\ldots, i\\}$ such that (a) $s[1..i-j]$ is segmentable, AND (b) $s[i-j+1..i]$ is a valid word.\n\nIntuition: the segmentation of $s[1..i]$ must end with some word of length $j$; before that word, $s[1..i-j]$ must itself be segmentable.",
+      "tips": [
+        { "label": "Why $B[0]$ = True", "content": "The empty string is trivially segmented into zero words. This base case lets the recurrence work cleanly when $s[1..i]$ is itself a single word (you'd need $B[0]$ ∧ ($s$ is a word) = True)." }
+      ]
+    },
+    {
+      "title": "Part 2 — Table for $s = \\text{catamaran}$ with $D = \\{a, am, at, cat, ran\\}$.",
+      "body": "Let's fill $B[1], \\ldots, B[9]$ using $B[0] = \\text{True}$.\n\n**$B[1]$** ($s[1] = \\text{c}$): check last-word lengths $j \\in \\{1\\}$. $s[1..1] = \\text{c} \\notin D$. **False.**\n\n**$B[2]$** ($s[1..2] = \\text{ca}$): $j=1$: $s[2..2]=\\text{a} \\in D$ ∧ $B[1]=$ False. $j=2$: $s[1..2]=\\text{ca} \\notin D$. **False.**\n\n**$B[3]$** ($s[1..3] = \\text{cat}$): $j=3$: $s[1..3]=\\text{cat} \\in D$ ∧ $B[0]=$ True. ✓ **True.**\n\n**$B[4]$** ($s[1..4] = \\text{cata}$): $j=1$: $s[4..4]=\\text{a} \\in D$ ∧ $B[3]=$ True. ✓ **True.**\n\n**$B[5]$** ($s[1..5] = \\text{catam}$): $j=1$: $\\text{m} \\notin D$. $j=2$: $s[4..5]=\\text{am} \\in D$ ∧ $B[3]=$ True. ✓ **True.**\n\n**$B[6]$** ($s[1..6] = \\text{catama}$): $j=1$: $s[6..6]=\\text{a} \\in D$ ∧ $B[5]=$ True. ✓ **True.**\n\n**$B[7]$** ($s[1..7] = \\text{catamar}$): $j=1$: $\\text{r} \\notin D$. $j=2$: $\\text{ar} \\notin D$. $j=3$: $\\text{mar} \\notin D$. Larger $j$: no matches. **False.**\n\n**$B[8]$** ($s[1..8] = \\text{catamara}$): $j=1$: $\\text{a} \\in D$ ∧ $B[7]=$ False. $j=2$: $\\text{ra} \\notin D$. $j=3$: $\\text{ara} \\notin D$. No matches. **False.**\n\n**$B[9]$** ($s[1..9] = \\text{catamaran}$): $j=1$: $\\text{n} \\notin D$. $j=2$: $\\text{an} \\notin D$. $j=3$: $s[7..9]=\\text{ran} \\in D$ ∧ $B[6]=$ True. ✓ **True.**\n\n**Final table:**\n\n| $i$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|---|---|---|---|---|---|---|---|---|---|\n| $B[i]$ | F | F | T | T | T | T | F | F | T |\n\nA valid segmentation of 'catamaran': **cat • am • a • ran** (lengths 3, 2, 1, 3). ✓",
+      "tips": [
+        { "label": "Back-tracing the segmentation", "content": "From $B[9]=T$ via $j=3$: last word is $s[7..9] = \\text{ran}$. Now recurse on $B[6]$. $B[6]=T$ via $j=1$ ($s[6..6]=\\text{a}$), recurse on $B[5]$. $B[5]=T$ via $j=2$ ($s[4..5]=\\text{am}$), recurse on $B[3]$. $B[3]=T$ via $j=3$ ($s[1..3]=\\text{cat}$), recurse on $B[0]=T$. Done. Segmentation: cat, am, a, ran." }
+      ]
+    },
+    {
+      "title": "Part 3 — Number of subproblems and runtime.",
+      "body": "**Subproblems:** $B[0], B[1], \\ldots, B[n]$, so there are $n+1 = O(n)$ subproblems.\n\n**Time per subproblem:** computing $B[i]$ requires trying $j = 1, \\ldots, i$. For each $j$:\n\n- Compute the substring $s[i-j+1..i]$: $O(1)$ with start/end pointers — no need to copy.\n- Dictionary check $D(\\cdot)$: $O(1)$ by assumption.\n- Lookup $B[i-j]$: $O(1)$.\n\nSo $O(i)$ work per subproblem, which is $O(n)$ in the worst case.\n\n**Total runtime:**\n$$\\text{Runtime} \\le (\\text{#subproblems}) \\times (\\text{max time per subproblem}) = O(n) \\times O(n) = O(n^2).$$\n\nMore precisely, $\\sum_{i=1}^{n} i = \\Theta(n^2)$, confirming the bound is tight.",
+      "tips": [
+        { "label": "Runtime formula", "content": "For DP: $\\text{Runtime} = (\\text{#subproblems}) \\times (\\text{time per subproblem})$ is almost always tight." },
+        { "label": "Why dictionary lookup is $O(1)$", "content": "Problem statement specifies it. In practice, you'd use a hash set (expected $O(1)$) or a trie (amortized $O(k)$ for $k$-length lookups, but the problem lets us treat it as a constant)." }
+      ]
+    }
+  ],
+  "answerKey": "Recurrence: $B[0]=T$, $B[i] = \\bigvee_{j=1}^{i} (B[i-j] \\wedge s[i-j+1..i] \\in D)$.\n\nFor 'catamaran': B = [T, F, F, T, T, T, T, F, F, T] (including $B[0]$).\n\nRuntime: $O(n)$ subproblems $\\times\\ O(n)$ per subproblem $= O(n^2)$."
+}

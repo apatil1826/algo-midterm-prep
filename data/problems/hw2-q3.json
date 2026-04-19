@@ -1,0 +1,33 @@
+{
+  "id": "hw2-q3",
+  "title": "HW2 Q3 — 3-Way Merge Sort",
+  "source": "Homework 2",
+  "statement": "3-Merge Sort splits the input list into 3 equal parts, recursively sorts each, then merges the three. (a) merge three sorted arrays of size $n/3$ in $O(n)$; (b) write the runtime recurrence; (c) solve it; (d) [optional] formally prove the $\\Theta$-bound.",
+  "topics": ["merge-sort", "divide-and-conquer"],
+  "pattern": "dc-design",
+  "steps": [
+    {
+      "title": "(a) 3-way merge algorithm.",
+      "body": "Maintain three pointers, one per sorted input $A, B, C$. At each step, take the minimum of the three current front elements and append it to the output. Advance that pointer. When one input is exhausted, handle the remaining two pointers (or run a 2-way merge on what's left).\n\n**Correctness (invariant):** after $i$ steps, the output contains the $i$ smallest elements across $A \\cup B \\cup C$, in sorted order. Each step adds the next-smallest element (the min of three front elements is the min of all remaining elements).\n\n**Runtime:** constant work per step, $n$ steps total → $O(n)$.",
+      "tips": []
+    },
+    {
+      "title": "(b) Recurrence.",
+      "body": "$T(n) = 3 T(n/3) + O(n)$.\n\n- The $3T(n/3)$ comes from recursively sorting the three pieces.\n- The $O(n)$ is the 3-way merge.",
+      "tips": []
+    },
+    {
+      "title": "(c) Solve the recurrence.",
+      "body": "Recursion tree. Level $i$: $3^i$ subproblems of size $n/3^i$, non-recursive work per subproblem $= n/3^i$. Level work $= 3^i \\cdot n/3^i = n$.\n\n**Constant $n$ per level.** Height $= \\log_3 n$. Total level-work $= n \\log_3 n = \\Theta(n \\log n)$.\n\nLeaves: $3^{\\log_3 n} = n$, each cost $1$. Leaf contribution $= n = o(n \\log n)$. Absorbed.\n\n$$T(n) = \\Theta(n \\log n).$$\n\n**So: splitting into 3 (or any constant $k$) does not beat classic 2-way Merge Sort asymptotically.** The base of the log changes, but $\\log_k n$ is $\\Theta(\\log n)$ for any constant $k > 1$.",
+      "tips": [
+        { "label": "Why log base doesn't help", "content": "$\\log_k n = (\\log_2 n) / (\\log_2 k) = \\Theta(\\log n)$. Dividing by a constant doesn't change asymptotic growth." }
+      ]
+    },
+    {
+      "title": "(d) Inductive $O(n \\log n)$ bound (optional).",
+      "body": "Want $T(n) \\le C_2 \\cdot n \\log n$. Pick $C_2 = C + 1$ (where $C$ is the constant in the $Cn$ merge work). Base $n = 3$: $T(3) = 3T(1) + 3C = 3 + 3C \\le C_2 \\cdot 3 \\log 3$. ✓\n\nInductive step:\n$$T(n) = 3T(n/3) + Cn \\le 3 \\cdot C_2 \\cdot (n/3) \\log(n/3) + Cn = C_2 n (\\log n - \\log 3) + Cn = C_2 n \\log n - C_2 n \\log 3 + Cn.$$\n\nFor $C_2 = C + 1$ and large enough $n$, the tail $-C_2 n \\log 3 + Cn = -(C+1)n\\log 3 + Cn = n(C - (C+1)\\log 3) \\le 0$ since $\\log 3 > 1$. So $T(n) \\le C_2 n \\log n$. $\\square$",
+      "tips": []
+    }
+  ],
+  "answerKey": "$T(n) = 3T(n/3) + O(n) = \\Theta(n \\log n)$. Same asymptotic as 2-way Merge Sort."
+}
